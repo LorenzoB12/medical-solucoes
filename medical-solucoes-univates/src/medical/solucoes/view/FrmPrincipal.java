@@ -30,11 +30,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        Pacientes = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        mnRegister = new javax.swing.JMenu();
+        mniUsers = new javax.swing.JMenuItem();
+        mniDoctors = new javax.swing.JMenuItem();
+        mniPacients = new javax.swing.JMenuItem();
+        mniAppointment = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -52,31 +52,31 @@ public class FrmPrincipal extends javax.swing.JFrame {
             .addGap(0, 456, Short.MAX_VALUE)
         );
 
-        jMenu1.setText("Cadastro");
+        mnRegister.setText("Cadastro");
 
-        jMenuItem2.setText("Usuarios");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        mniUsers.setText("Usuarios");
+        mniUsers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                mniUsersActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        mnRegister.add(mniUsers);
 
-        jMenuItem3.setText("Medicos");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        mniDoctors.setText("Medicos");
+        mniDoctors.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                mniDoctorsActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        mnRegister.add(mniDoctors);
 
-        Pacientes.setText("Pacientes");
-        jMenu1.add(Pacientes);
+        mniPacients.setText("Pacientes");
+        mnRegister.add(mniPacients);
 
-        jMenuItem5.setText("Consultas");
-        jMenu1.add(jMenuItem5);
+        mniAppointment.setText("Consultas");
+        mnRegister.add(mniAppointment);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(mnRegister);
 
         jMenu2.setText("Relatorios");
         jMenuBar1.add(jMenu2);
@@ -115,17 +115,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void mniUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniUsersActionPerformed
         IfrCadastroUsers ifrCadastroUsers = new IfrCadastroUsers();
         
         jDesktopPane1.add(ifrCadastroUsers);
         
         ifrCadastroUsers.setVisible(true);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_mniUsersActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    private void mniDoctorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniDoctorsActionPerformed
+        
+        IfrCadastroDoctors ifrCadastroDoctors = new IfrCadastroDoctors();
+        
+        jDesktopPane1.add(ifrCadastroDoctors);
+        
+        ifrCadastroDoctors.setVisible(true);
+    }//GEN-LAST:event_mniDoctorsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -164,15 +169,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem Pacientes;
     private javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenu mnRegister;
+    private javax.swing.JMenuItem mniAppointment;
+    private javax.swing.JMenuItem mniDoctors;
+    private javax.swing.JMenuItem mniPacients;
+    private javax.swing.JMenuItem mniUsers;
     // End of variables declaration//GEN-END:variables
 }
