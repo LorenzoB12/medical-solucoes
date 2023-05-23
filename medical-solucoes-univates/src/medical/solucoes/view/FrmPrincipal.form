@@ -30,6 +30,14 @@
                 <Property name="text" type="java.lang.String" value="Pacientes"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mniUsers1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Especialidades"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mniUsers1ActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu4">
@@ -54,7 +62,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mniAppointment">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Consultas"/>
+                <Property name="text" type="java.lang.String" value="Consultas Por Usu&#xe1;rio"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mniAppointmentActionPerformed"/>
