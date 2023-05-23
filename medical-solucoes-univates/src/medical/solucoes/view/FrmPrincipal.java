@@ -34,8 +34,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         mniUsers = new javax.swing.JMenuItem();
         mniDoctors = new javax.swing.JMenuItem();
         mniPacients = new javax.swing.JMenuItem();
-        mniAppointment = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        mniAppointment1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        mniAppointment = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -73,12 +75,30 @@ public class FrmPrincipal extends javax.swing.JFrame {
         mniPacients.setText("Pacientes");
         mnRegister.add(mniPacients);
 
-        mniAppointment.setText("Consultas");
-        mnRegister.add(mniAppointment);
-
         jMenuBar1.add(mnRegister);
 
+        jMenu4.setText("Operacional");
+
+        mniAppointment1.setText("Consultas");
+        mniAppointment1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniAppointment1ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(mniAppointment1);
+
+        jMenuBar1.add(jMenu4);
+
         jMenu2.setText("Relatorios");
+
+        mniAppointment.setText("Consultas");
+        mniAppointment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniAppointmentActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mniAppointment);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Ajuda");
@@ -132,6 +152,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         ifrCadastroDoctors.setVisible(true);
     }//GEN-LAST:event_mniDoctorsActionPerformed
 
+    private void mniAppointmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAppointmentActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mniAppointmentActionPerformed
+
+    private void mniAppointment1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAppointment1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mniAppointment1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -172,10 +200,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenu mnRegister;
     private javax.swing.JMenuItem mniAppointment;
+    private javax.swing.JMenuItem mniAppointment1;
     private javax.swing.JMenuItem mniDoctors;
     private javax.swing.JMenuItem mniPacients;
     private javax.swing.JMenuItem mniUsers;
