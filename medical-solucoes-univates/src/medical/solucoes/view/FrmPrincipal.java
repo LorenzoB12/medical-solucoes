@@ -41,6 +41,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         mniAppointment1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         mniAppointment = new javax.swing.JMenuItem();
+        mniAppointment2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -76,6 +77,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         mnRegister.add(mniDoctors);
 
         mniPacients.setText("Pacientes");
+        mniPacients.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniPacientsActionPerformed(evt);
+            }
+        });
         mnRegister.add(mniPacients);
 
         mniUsers1.setText("Especialidades");
@@ -109,6 +115,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         jMenu2.add(mniAppointment);
+
+        mniAppointment2.setText("Consultas Por Paciente");
+        mniAppointment2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniAppointment2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mniAppointment2);
 
         jMenuBar1.add(jMenu2);
 
@@ -155,7 +169,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mniDoctorsActionPerformed
 
     private void mniAppointmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAppointmentActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_mniAppointmentActionPerformed
 
     private void mniAppointment1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAppointment1ActionPerformed
@@ -165,6 +179,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void mniUsers1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniUsers1ActionPerformed
         abrirInternalFrame(new IfrCadastroEspecialidades());
     }//GEN-LAST:event_mniUsers1ActionPerformed
+
+    private void mniPacientsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPacientsActionPerformed
+        abrirInternalFrame(new IfrCadastroPacientes());
+    }//GEN-LAST:event_mniPacientsActionPerformed
+
+    private void mniAppointment2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAppointment2ActionPerformed
+        abrirInternalFrame(new IfrConsultasPorPacientes());
+    }//GEN-LAST:event_mniAppointment2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;
@@ -176,6 +198,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu mnRegister;
     private javax.swing.JMenuItem mniAppointment;
     private javax.swing.JMenuItem mniAppointment1;
+    private javax.swing.JMenuItem mniAppointment2;
     private javax.swing.JMenuItem mniDoctors;
     private javax.swing.JMenuItem mniPacients;
     private javax.swing.JMenuItem mniUsers;

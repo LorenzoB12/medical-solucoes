@@ -72,6 +72,11 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
         jLabel8.setText("ESPECIALIZAÇÃO");
 
         comboBoxEspecializacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cardiologia" }));
+        comboBoxEspecializacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxEspecializacaoActionPerformed(evt);
+            }
+        });
 
         btnSalvarUsuario.setText("NOVO");
         btnSalvarUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -124,10 +129,9 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(tfdNomeDoc, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 8, Short.MAX_VALUE)
+                        .addGap(0, 26, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addGap(186, 186, 186))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -225,6 +229,10 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
     private void btnSalvarUsuario1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarUsuario1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalvarUsuario1ActionPerformed
+
+    private void comboBoxEspecializacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxEspecializacaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxEspecializacaoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
