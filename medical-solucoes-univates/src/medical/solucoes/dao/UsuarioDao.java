@@ -38,9 +38,6 @@ public class UsuarioDao {
 
             List<Usuario> lista = new ArrayList<>();
             lista.addAll(0, Usuario.usuariosEstaticos);
-            lista.add(Usuario.user1);
-            lista.add(Usuario.user2);
-            lista.add(Usuario.user3);
 
             //CRIA MATRIZ DE ACORDO COM O NUMERO DE REGISTROS
             dadosTabela = new Object[lista.size()][4];

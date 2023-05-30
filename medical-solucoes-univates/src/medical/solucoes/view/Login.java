@@ -4,6 +4,7 @@
  */
 package medical.solucoes.view;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -32,15 +33,14 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txtFieldPassword = new javax.swing.JTextField();
         txtFieldLogin = new javax.swing.JTextField();
         btnLogar = new javax.swing.JButton();
         lblUsuario = new javax.swing.JLabel();
         lblSenha = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        txtFieldPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        txtFieldPassword.setToolTipText("Senha");
 
         txtFieldLogin.setToolTipText("Usuário");
         txtFieldLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -55,10 +55,28 @@ public class Login extends javax.swing.JFrame {
                 btnLogarActionPerformed(evt);
             }
         });
+        btnLogar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnLogarKeyPressed(evt);
+            }
+        });
 
         lblUsuario.setText("Usuário");
 
         lblSenha.setText("Senha");
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/logo.jpeg"))); // NOI18N
+
+        txtFieldPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFieldPasswordActionPerformed(evt);
+            }
+        });
+        txtFieldPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFieldPasswordKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -66,29 +84,31 @@ public class Login extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(102, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblSenha)
-                    .addComponent(lblUsuario)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(btnLogar, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtFieldLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtFieldPassword)
+                    .addComponent(txtFieldLogin)
+                    .addComponent(lblSenha, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblUsuario, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnLogar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(98, 98, 98))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(86, 86, 86)
+                .addGap(24, 24, 24)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(lblUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtFieldLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblSenha)
-                .addGap(3, 3, 3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnLogar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addGap(43, 43, 43))
         );
 
         pack();
@@ -101,37 +121,27 @@ public class Login extends javax.swing.JFrame {
     private void btnLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogarActionPerformed
         String login = txtFieldLogin.getText();
         String senha = txtFieldPassword.getText();
-        boolean loginValid = false;
 
-        //USERS ESTÁTICOS USADOS ADICIONADOS NA LISTA DE USUARIOS
-        List<Usuario> usuarios = new ArrayList<>();
-        usuarios.add(Usuario.user1);
-        usuarios.add(Usuario.user2);
-        usuarios.add(Usuario.user3);
-
-        //VALIDAÇÃO DOS USUÁRIOS COM O LOGIN E A SENHA PASSADOS NOS JTEXTFIELDS
-        for(Usuario user : usuarios){
-            if(user.getLogin().equals(login) && user.getSenha().equals(senha)){
-
-                loginValid = true;
-                break;
-
-            } else{
-                loginValid = false;
-            }
-        }
-
-        //SE LOGIN E SENHA TRUE, ENTRA NA APLICACAO
-        if(loginValid){
-            new FrmPrincipal().setVisible(true);
-            this.setVisible(false);
-
-            //ELSE, MENSAGEM DE SENHA INCORRETA
-        } else{
-            JOptionPane.showMessageDialog(null, "Login ou senha incorretos!");
-        }
+        realizarLogin(login, senha);
 
     }//GEN-LAST:event_btnLogarActionPerformed
+
+    private void txtFieldPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldPasswordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFieldPasswordActionPerformed
+
+    private void btnLogarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnLogarKeyPressed
+
+    }//GEN-LAST:event_btnLogarKeyPressed
+
+    private void txtFieldPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldPasswordKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String login = txtFieldLogin.getText();
+            String senha = txtFieldPassword.getText();
+
+            realizarLogin(login, senha);
+        }
+    }//GEN-LAST:event_txtFieldPasswordKeyPressed
 
     /**
      * @param args the command line arguments
@@ -170,9 +180,42 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblSenha;
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JTextField txtFieldLogin;
-    private javax.swing.JTextField txtFieldPassword;
+    private javax.swing.JPasswordField txtFieldPassword;
     // End of variables declaration//GEN-END:variables
+
+    private void realizarLogin(String login, String senha) {
+
+        boolean loginValid = false;
+
+        //USERS ESTÁTICOS USADOS ADICIONADOS NA LISTA DE USUARIOS
+        List<Usuario> usuarios = new ArrayList<>();
+        usuarios.addAll(0, Usuario.usuariosEstaticos);
+
+        //VALIDAÇÃO DOS USUÁRIOS COM O LOGIN E A SENHA PASSADOS NOS JTEXTFIELDS
+        for (Usuario user : usuarios) {
+            if (user.getLogin().equals(login) && user.getSenha().equals(senha)) {
+
+                loginValid = true;
+                break;
+
+            } else {
+                loginValid = false;
+            }
+        }
+
+        //SE LOGIN E SENHA TRUE, ENTRA NA APLICACAO
+        if (loginValid) {
+            new FrmPrincipal().setVisible(true);
+            this.setVisible(false);
+
+            //ELSE, MENSAGEM DE SENHA INCORRETA
+        } else {
+            JOptionPane.showMessageDialog(null, "Login ou senha incorretos!");
+        }
+
+    }
 }
