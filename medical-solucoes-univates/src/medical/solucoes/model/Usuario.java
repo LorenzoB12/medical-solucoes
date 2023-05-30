@@ -9,6 +9,7 @@ public class Usuario {
     public static Usuario user1;
     public static Usuario user2;
     public static Usuario user3;
+    public static Usuario user4;
     
     public static List<Usuario> usuariosEstaticos = new ArrayList<>();
     
@@ -21,6 +22,14 @@ public class Usuario {
         
         user3 = new Usuario("Fabricio", "fabricio@univates.com.br", "FABRICIO", "999999");
         user3.codUsuario = 3l;
+        
+        user4 = new Usuario("ADMIN", "admin@admin.com", "ADMIN", "ADMIN");
+        user4.codUsuario = 4l;
+        
+        usuariosEstaticos.add(user1);
+        usuariosEstaticos.add(user2);
+        usuariosEstaticos.add(user3);
+        usuariosEstaticos.add(user4);
     }
     
     private Long codUsuario;
