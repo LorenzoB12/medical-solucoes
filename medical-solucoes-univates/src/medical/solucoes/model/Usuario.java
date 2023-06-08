@@ -1,5 +1,7 @@
 package medical.solucoes.model;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
 public class Usuario {
 
     private Long id;
@@ -17,11 +19,12 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nome, String email, String login, String senha) {
+    public Usuario(String nome, String email, String login, String senha, boolean isAtivo) {
         this.nome = nome;
         this.email = email;
         this.login = login;
-        this.senha = senha;
+        this.senha = this.criptografarSenha(senha);
+        this.ativo = isAtivo;
     }
 
     public Long getId() {
@@ -70,6 +73,11 @@ public class Usuario {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    private String criptografarSenha(String senha) {
+        BCrypt.Hasher hasher = BCrypt.withDefaults();
+        return hasher.hashToString(10, senha.toCharArray());
     }
 
 }

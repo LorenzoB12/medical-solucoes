@@ -12,16 +12,18 @@ import medical.solucoes.model.Usuario;
 
 /**
  *
- * 
+ *
  */
 public class IfrCadastroUsers extends javax.swing.JInternalFrame {
 
+    private Usuario usuario = null;
+
     /**
-     * Creates new form 
+     * Creates new form
      */
     public IfrCadastroUsers() {
         initComponents();
-        
+
     }
 
     /**
@@ -96,6 +98,7 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
         jLabel9.setText("SENHA");
 
         buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setSelected(true);
         jRadioButton1.setText("Ativo");
 
         buttonGroup1.add(jRadioButton2);
@@ -169,13 +172,10 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -236,24 +236,7 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnSalvarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarUsuarioActionPerformed
-        String nome = tfdNomeUsuario.getText();
-        String email = tfdEmailUsuario.getText();
-        String login = tfdLogin.getText();
-        String senha = tfdSenhaUsuario.getText();
-                
-        Usuario usuario = new Usuario(nome, email, login, senha);
-        // Usuario.usuariosEstaticos.add(usuario);
-        
-        tfdNomeUsuario.setText("");
-        tfdEmailUsuario.setText("");
-        tfdLogin.setText("");
-        tfdSenhaUsuario.setText("");
-            
-        JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
-            
-        tfdNomeUsuario.requestFocus();
-        
-        //new UsuarioDao().popularTabela(jTable1, "");
+        this.salvar();
     }//GEN-LAST:event_btnSalvarUsuarioActionPerformed
 
     private void tfdSenhaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfdSenhaUsuarioActionPerformed
@@ -264,6 +247,89 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
         //new UsuarioDao().popularTabela(jTable1, "");
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
+    private void limparFormulario() {
+        tfdNomeUsuario.setText("");
+        tfdEmailUsuario.setText("");
+        tfdLogin.setText("");
+        tfdSenhaUsuario.setText("");
+
+        tfdNomeUsuario.requestFocus();
+        this.usuario = null;
+    }
+
+    private boolean validarFormulario() {
+        if (tfdNomeUsuario.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Informe um nome", "Erro de Validação",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (tfdEmailUsuario.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Informe um e-mail", "Erro de Validação",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (tfdLogin.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Informe um login", "Erro de Validação",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (tfdSenhaUsuario.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Informe uma senha", "Erro de Validação",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void salvar() {
+        if (!this.validarFormulario()) {
+            return;
+        }
+
+        String nome = tfdNomeUsuario.getText();
+        String email = tfdEmailUsuario.getText();
+        String login = tfdLogin.getText();
+        String senha = tfdSenhaUsuario.getText();
+
+        boolean isNovoRegistro = false;
+        if (usuario == null) {
+            this.usuario = new Usuario(nome, email, login, senha, jRadioButton1.isSelected());
+            isNovoRegistro = true;
+        }
+
+        UsuarioDao usuarioDao = new UsuarioDao();
+        if (isNovoRegistro) {
+            if (usuarioDao.salvar(usuario)) {
+                JOptionPane.showMessageDialog(null,
+                        "Usuário salvo com sucesso.", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
+                this.limparFormulario();
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Erro ao salvar usuário.", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            if (usuarioDao.atualizar(usuario)) {
+                JOptionPane.showMessageDialog(null,
+                        "Usuário atualizado com sucesso.", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
+                this.limparFormulario();
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Erro ao atualizar usuário.", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSalvarUsuario;
