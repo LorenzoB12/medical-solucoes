@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import medical.solucoes.dao.UsuarioDao;
 import medical.solucoes.model.Usuario;
+import medical.tabelas.TableModelUsuarios;
 
 /**
  *
@@ -17,13 +18,19 @@ import medical.solucoes.model.Usuario;
 public class IfrCadastroUsers extends javax.swing.JInternalFrame {
 
     private Usuario usuario = null;
+    private TableModelUsuarios tableModel = null;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
 
     /**
      * Creates new form
      */
     public IfrCadastroUsers() {
         initComponents();
-
+    }
+    
+    private void carregarTabela(){
+        tableModel = new TableModelUsuarios(this.usuarioDao.listar());
+        jTable1.setModel(tableModel);
     }
 
     /**
@@ -46,14 +53,15 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         tfdNomeUsuario = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        tfdSenhaUsuario = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         tfdLogin = new javax.swing.JTextField();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
+        tfdSenhaUsuario = new javax.swing.JPasswordField();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        btnSalvarUsuario1 = new javax.swing.JButton();
 
         setTitle("Usuários");
 
@@ -87,12 +95,6 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
 
         jLabel8.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel8.setText("LOGIN");
-
-        tfdSenhaUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfdSenhaUsuarioActionPerformed(evt);
-            }
-        });
 
         jLabel9.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel9.setText("SENHA");
@@ -128,12 +130,12 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
                             .addComponent(jLabel9))
                         .addGap(26, 26, 26)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfdLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jRadioButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jRadioButton2)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(tfdLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE)
                             .addComponent(tfdSenhaUsuario))))
                 .addGap(46, 46, 46))
         );
@@ -144,7 +146,7 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(tfdNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGap(34, 34, 34)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -157,11 +159,15 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(tfdLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(tfdSenhaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 20, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(tfdSenhaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButton1)
                     .addComponent(jRadioButton2))
@@ -178,6 +184,11 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
 
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -199,6 +210,13 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Listagem", jPanel1);
 
+        btnSalvarUsuario1.setText("Novo");
+        btnSalvarUsuario1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarUsuario1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -208,6 +226,8 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnSalvarUsuario1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSalvarUsuario)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)
@@ -224,7 +244,8 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(btnSalvarUsuario))
+                    .addComponent(btnSalvarUsuario)
+                    .addComponent(btnSalvarUsuario1))
                 .addContainerGap())
         );
 
@@ -239,19 +260,39 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
         this.salvar();
     }//GEN-LAST:event_btnSalvarUsuarioActionPerformed
 
-    private void tfdSenhaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfdSenhaUsuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfdSenhaUsuarioActionPerformed
-
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        //new UsuarioDao().popularTabela(jTable1, "");
+        this.carregarTabela();
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
+    private void btnSalvarUsuario1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarUsuario1ActionPerformed
+        this.limparFormulario();
+    }//GEN-LAST:event_btnSalvarUsuario1ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        if(evt.getClickCount() == 2){
+            this.usuario = (Usuario) tableModel.getValueAt(jTable1.getSelectedRow(), -1);
+            jTabbedPane1.setSelectedIndex(0);
+            this.carregarFormulario();
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void carregarFormulario(){
+        tfdNomeUsuario.setText(this.usuario.getNome());
+        tfdEmailUsuario.setText(this.usuario.getEmail());
+        tfdLogin.setText(this.usuario.getLogin());
+        if(this.usuario.isAtivo()){
+            jRadioButton1.setSelected(true);
+        } else {
+            jRadioButton2.setSelected(true);
+        }
+    }
+    
     private void limparFormulario() {
         tfdNomeUsuario.setText("");
         tfdEmailUsuario.setText("");
         tfdLogin.setText("");
         tfdSenhaUsuario.setText("");
+        jRadioButton1.setSelected(true);
 
         tfdNomeUsuario.requestFocus();
         this.usuario = null;
@@ -297,15 +338,20 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
         String nome = tfdNomeUsuario.getText();
         String email = tfdEmailUsuario.getText();
         String login = tfdLogin.getText();
-        String senha = tfdSenhaUsuario.getText();
+        char[] senha = tfdSenhaUsuario.getPassword();
 
         boolean isNovoRegistro = false;
         if (usuario == null) {
-            this.usuario = new Usuario(nome, email, login, senha, jRadioButton1.isSelected());
+            this.usuario = new Usuario(nome, email, login, new String(senha), jRadioButton1.isSelected());
             isNovoRegistro = true;
+        } else {
+            this.usuario.setNome(nome);
+            this.usuario.setEmail(email);
+            this.usuario.setLogin(login);
+            this.usuario.setSenha(new String(senha));
+            this.usuario.setAtivo(jRadioButton1.isSelected());
         }
 
-        UsuarioDao usuarioDao = new UsuarioDao();
         if (isNovoRegistro) {
             if (usuarioDao.salvar(usuario)) {
                 JOptionPane.showMessageDialog(null,
@@ -333,6 +379,7 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSalvarUsuario;
+    private javax.swing.JButton btnSalvarUsuario1;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -350,6 +397,6 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
     private javax.swing.JTextField tfdEmailUsuario;
     private javax.swing.JTextField tfdLogin;
     private javax.swing.JTextField tfdNomeUsuario;
-    private javax.swing.JTextField tfdSenhaUsuario;
+    private javax.swing.JPasswordField tfdSenhaUsuario;
     // End of variables declaration//GEN-END:variables
 }

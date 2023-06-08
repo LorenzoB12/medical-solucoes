@@ -60,7 +60,7 @@ public class UsuarioDao {
         try {
             Statement st = ConexaoBD.getInstance().getConnection().createStatement();
 
-            String sql = "SELECT * FROM usuarios";
+            String sql = "SELECT * FROM usuarios ORDER BY id ASC";
             ResultSet retorno = st.executeQuery(sql);
 
             Usuario usuarioObj = null;
