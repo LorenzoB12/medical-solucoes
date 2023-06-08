@@ -21,7 +21,7 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
      */
     public IfrCadastroUsers() {
         initComponents();
-        new UsuarioDao().popularTabela(jTable1, "");
+        
     }
 
     /**
@@ -242,7 +242,7 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
         String senha = tfdSenhaUsuario.getText();
                 
         Usuario usuario = new Usuario(nome, email, login, senha);
-        Usuario.usuariosEstaticos.add(usuario);
+        // Usuario.usuariosEstaticos.add(usuario);
         
         tfdNomeUsuario.setText("");
         tfdEmailUsuario.setText("");
@@ -253,7 +253,7 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
             
         tfdNomeUsuario.requestFocus();
         
-        new UsuarioDao().popularTabela(jTable1, "");
+        //new UsuarioDao().popularTabela(jTable1, "");
     }//GEN-LAST:event_btnSalvarUsuarioActionPerformed
 
     private void tfdSenhaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfdSenhaUsuarioActionPerformed
@@ -261,7 +261,7 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tfdSenhaUsuarioActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        new UsuarioDao().popularTabela(jTable1, "");
+        //new UsuarioDao().popularTabela(jTable1, "");
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
 

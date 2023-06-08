@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import medical.solucoes.dao.UsuarioDao;
 import medical.solucoes.model.Usuario;
 
 /**
@@ -143,41 +144,6 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtFieldPasswordKeyPressed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login().setVisible(true);
-            }
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogar;
     private javax.swing.JLabel jLabel1;
@@ -191,21 +157,20 @@ public class Login extends javax.swing.JFrame {
 
         boolean loginValid = false;
 
-        //USERS ESTÁTICOS USADOS ADICIONADOS NA LISTA DE USUARIOS
-        List<Usuario> usuarios = new ArrayList<>();
-        usuarios.addAll(0, Usuario.usuariosEstaticos);
+        UsuarioDao usuarioDao = new UsuarioDao();
+        Usuario usuario = usuarioDao.getByLogin(login);
 
-        //VALIDAÇÃO DOS USUÁRIOS COM O LOGIN E A SENHA PASSADOS NOS JTEXTFIELDS
-        for (Usuario user : usuarios) {
-            if (user.getLogin().equals(login) && user.getSenha().equals(senha)) {
-
-                loginValid = true;
-                break;
-
-            } else {
-                loginValid = false;
-            }
+        // Caso nao tenha localizado o usuario
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Login ou senha incorretos!",
+                    "Erro de Login",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        loginValid = usuarioDao.doLogin(senha, usuario.getSenha());
 
         //SE LOGIN E SENHA TRUE, ENTRA NA APLICACAO
         if (loginValid) {
