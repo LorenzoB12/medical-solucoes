@@ -51,10 +51,6 @@ public class UsuarioDao {
         }
     }
 
-    public boolean excluir(Usuario usuario) {
-        return false;
-    }
-
     public ArrayList<Usuario> listar() {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         try {
