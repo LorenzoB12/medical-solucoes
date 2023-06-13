@@ -26,25 +26,6 @@ public class Paciente {
     private String telefone;
     
     private String genero;
-
-    //USERS ESTÁTICOS EM MEMÓRIA ENQUANTO NÃO INTEGRAMOS COM O BD
-    public static Paciente p1;
-    public static Paciente p2;
-    public static Paciente p3;
-    
-    public static List<Paciente> pacientesEstaticos = new ArrayList<>();
-    
-    static{
-        p1 = new Paciente(1l, "Matheus da Silva", "95959584847", "01/07/1995", "52999190347", "MASCULINO");
-        
-        p2 = new Paciente(2l, "Felipe Santos", "02145547448", "01/05/2000", "52998985574", "MASCULINO");
-        
-        p3 = new Paciente(3l, "Luis Pinheiro", "0215411475", "22/09/2001", "52919185457", "MASCULINO");
-        
-        pacientesEstaticos.add(p1);
-        pacientesEstaticos.add(p2);
-        pacientesEstaticos.add(p3);
-    }
     
     public Paciente(Long id, String nome, String cpf, String dataNascimento, String telefone, String genero) {
         this.id = id;
@@ -56,8 +37,12 @@ public class Paciente {
         this.indAtivo = Boolean.TRUE;
     }
     
+    public Paciente(){};
     
-
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public Long getId() {
         return id;
     }

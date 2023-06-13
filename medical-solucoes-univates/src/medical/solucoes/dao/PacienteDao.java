@@ -4,6 +4,14 @@
  */
 package medical.solucoes.dao;
 
+import conexao.ConexaoBD;
+import java.sql.PreparedStatement;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
@@ -19,83 +27,61 @@ import medical.solucoes.model.Paciente;
 public class PacienteDao {
     
     
+    public boolean salvar(Paciente p) {
+        System.out.println(p.getDataNascimento());
+        
+        try {
+            String sql = "INSERT INTO PACIENTES (nome, data_nascimento, cpf, telefone, genero, ativo) VALUES (?, ?, ?, ?, ?, ?)";
+            
+            PreparedStatement pstm = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
+            pstm.setString(1, p.getNome());
+            
+            Integer dia = Integer.parseInt(p.getDataNascimento().split("/")[0]);
+            Integer mes = Integer.parseInt(p.getDataNascimento().split("/")[1]);
+            Integer ano = Integer.parseInt(p.getDataNascimento().split("/")[2]);
+            LocalDate localDate = LocalDate.of(ano, mes, dia);
+            Date sqlDate = Date.valueOf(localDate);
+            
+            pstm.setDate(2, sqlDate);
+            pstm.setString(3, p.getCpf());
+            pstm.setString(4, p.getTelefone());
+            pstm.setString(5, p.getGenero());
+            pstm.setBoolean(6, p.getIndAtivo());
+            
+            pstm.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    
     public Paciente consultarId(Long idPaciente){
         
-        Paciente retornoPaciente = null;
-        
-        List<Paciente> listaPacientes = Paciente.pacientesEstaticos;
-        
-        for(Paciente p: listaPacientes){
-            if(p.getId() == idPaciente){
-                retornoPaciente = p;
-            }
-        }
-        
-        return retornoPaciente;
+        return null;
         
     }
     
     public Long consultarProximoId(){
         
-        Long proximoId = null;
-        
-        List<Paciente> listaPacientes = Paciente.pacientesEstaticos;
-        
-        proximoId = listaPacientes.get(listaPacientes.size() - 1).getId();
-        
-        return (proximoId + 1);
+        return null;
         
     }
     
     public String inativarPaciente(Long idPaciente){
         
-        List<Paciente> listaPacientes = Paciente.pacientesEstaticos;
-        
-        String erro = "Nenhum paciente encontrado!";
-        
-        for(Paciente p: listaPacientes){
-            if(p.getId() == idPaciente){
-                p.setIndAtivo(Boolean.FALSE);
-                erro = null;
-            }
-        }
-        
-        return erro;
+        return null;
         
     }
     
     public String ativarPaciente(Long idPaciente){
         
-        List<Paciente> listaPacientes = Paciente.pacientesEstaticos;
-        
-        String erro = "Nenhum paciente encontrado!";
-        
-        for(Paciente p: listaPacientes){
-            if(p.getId() == idPaciente){
-                p.setIndAtivo(Boolean.TRUE);
-                erro = null;
-            }
-        }
-        
-        return erro;
+        return null;
         
     }
     
     public void atualizarPaciente(Long idPaciente, String nome, String dataNascimento, String cpf, String telefone, String genero){
-        
-        Paciente paciente;
-        
-        List<Paciente> listaPacientes = Paciente.pacientesEstaticos;
-        
-        for(Paciente p: listaPacientes){
-            if(p.getId() == idPaciente){
-                p.setNome(nome);
-                p.setDataNascimento(dataNascimento);
-                p.setCpf(cpf);
-                p.setTelefone(telefone);
-                p.setGenero(genero);
-            }
-        }
         
     }
     
@@ -122,7 +108,6 @@ public class PacienteDao {
             int linha = 0;
 
             List<Paciente> lista = new ArrayList<>();
-            lista.addAll(0, Paciente.pacientesEstaticos);
 
             //CRIA MATRIZ DE ACORDO COM O NUMERO DE REGISTROS
             dadosTabela = new Object[lista.size()][7];
@@ -186,6 +171,35 @@ public class PacienteDao {
                     break;
             }
         }
+    }
+
+    public ArrayList<Paciente> listar() {
+        ArrayList<Paciente> pacientes = new ArrayList<>();
+        try {
+            Statement st = ConexaoBD.getInstance().getConnection().createStatement();
+
+            String sql = "SELECT * FROM pacientes ORDER BY id ASC";
+            ResultSet retorno = st.executeQuery(sql);
+
+            Paciente pacienteObj = null;
+            while (retorno.next()) {
+                pacienteObj = new Paciente();
+                pacienteObj.setId(retorno.getLong("id"));
+                pacienteObj.setNome(retorno.getString("nome"));
+                pacienteObj.setDataNascimento(retorno.getString("data_nascimento"));
+                pacienteObj.setCpf(retorno.getString("cpf"));
+                pacienteObj.setTelefone(retorno.getString("telefone"));
+                pacienteObj.setGenero(retorno.getString("genero"));
+                pacienteObj.setIndAtivo(retorno.getBoolean("ativo"));
+               
+                pacientes.add(pacienteObj);
+            }
+
+            return pacientes;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pacientes;
     }
     
 }

@@ -11,6 +11,8 @@ import medical.solucoes.dao.PacienteDao;
 import medical.solucoes.dao.UsuarioDao;
 import medical.solucoes.model.Paciente;
 import medical.solucoes.model.Usuario;
+import medical.tabelas.TableModelPacientes;
+import medical.tabelas.TableModelUsuarios;
 
 /**
  *
@@ -19,13 +21,15 @@ import medical.solucoes.model.Usuario;
 public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
 
     private Long idPaciente = 0l;
+    private TableModelPacientes tableModel = null;
+    private final PacienteDao pacienteDao = new PacienteDao();
     
     /**
      * Creates new form 
      */
     public IfrCadastroPacientes() {
         initComponents();
-        new PacienteDao().popularTabela(jTable1, "");
+        this.carregarTabela();
     }
 
     /**
@@ -77,6 +81,11 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
             }
         });
 
+        jTabbedPane1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTabbedPane1FocusGained(evt);
+            }
+        });
         jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTabbedPane1MouseClicked(evt);
@@ -289,7 +298,7 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
         Paciente paciente = new Paciente(id, nome, cpf, dataNascimento, telefone, genero);
         
         if(idPaciente == 0l){
-            Paciente.pacientesEstaticos.add(paciente);
+            new PacienteDao().salvar(paciente);
         } else{
             PacienteDao pacienteDao = new PacienteDao();
             pacienteDao.atualizarPaciente(idPaciente, nome, dataNascimento, cpf, telefone, genero);
@@ -314,7 +323,7 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tfdTelefonePacienteActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        new PacienteDao().popularTabela(jTable1, "");
+        this.carregarTabela();
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void jComboBoxGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxGeneroActionPerformed
@@ -372,6 +381,15 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
         new PacienteDao().popularTabela(jTable1, "");
     }//GEN-LAST:event_btnAtivarInativarPacienteActionPerformed
 
+    private void jTabbedPane1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabbedPane1FocusGained
+        
+    }//GEN-LAST:event_jTabbedPane1FocusGained
+    
+    private void carregarTabela(){
+        tableModel = new TableModelPacientes(this.pacienteDao.listar());
+        jTable1.setModel(tableModel);
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtivarInativarPaciente;
