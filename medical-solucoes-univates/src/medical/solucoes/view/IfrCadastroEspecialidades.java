@@ -1,9 +1,19 @@
 package medical.solucoes.view;
 
+import javax.swing.JOptionPane;
+import medical.solucoes.dao.EspecialidadeDao;
+import medical.solucoes.model.Especialidade;
+import medical.tabelas.TableModelEspecialidades;
+
 public class IfrCadastroEspecialidades extends javax.swing.JInternalFrame {
+
+    private Especialidade especialidade = null;
+    private final EspecialidadeDao especialidadeDao = new EspecialidadeDao();
+    private TableModelEspecialidades table = null;
 
     public IfrCadastroEspecialidades() {
         initComponents();
+        this.carregarTabela();
     }
 
     @SuppressWarnings("unchecked")
@@ -25,12 +35,6 @@ public class IfrCadastroEspecialidades extends javax.swing.JInternalFrame {
         setClosable(true);
         setTitle("Cadastro de Especialidades");
         setToolTipText("");
-
-        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTabbedPane1MouseClicked(evt);
-            }
-        });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
 
@@ -85,7 +89,7 @@ public class IfrCadastroEspecialidades extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnSalvarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSalvarUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(172, 172, 172))
@@ -95,15 +99,17 @@ public class IfrCadastroEspecialidades extends javax.swing.JInternalFrame {
 
         tblDoc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
+        tblDoc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDocMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblDoc);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -146,16 +152,83 @@ public class IfrCadastroEspecialidades extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarUsuarioActionPerformed
-        
+        this.salvar();
     }//GEN-LAST:event_btnSalvarUsuarioActionPerformed
 
-    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        
-    }//GEN-LAST:event_jTabbedPane1MouseClicked
-
     private void btnSalvarUsuario1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarUsuario1ActionPerformed
-        this.tfDescricao.setText("");
+        this.limparFormulario();
     }//GEN-LAST:event_btnSalvarUsuario1ActionPerformed
+
+    private void tblDocMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDocMouseClicked
+        if (evt.getClickCount() == 2) {
+            this.especialidade = (Especialidade) table.getValueAt(tblDoc.getSelectedRow(), -1);
+            this.carregarFormulario();
+            jTabbedPane1.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_tblDocMouseClicked
+
+    private void limparFormulario() {
+        this.carregarTabela();
+        tfDescricao.setText("");
+        this.especialidade = null;
+    }
+
+    private void carregarFormulario() {
+        tfDescricao.setText(this.especialidade.getDescricao());
+    }
+
+    private boolean validarFormulario() {
+        if (tfDescricao.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Descrição não informada", "Erro de Validação",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void salvar() {
+        if (!this.validarFormulario()) {
+            return;
+        }
+
+        boolean isNovoCadastro = false;
+        if (this.especialidade == null) {
+            this.especialidade = new Especialidade();
+            isNovoCadastro = true;
+        }
+
+        this.especialidade.setDescricao(tfDescricao.getText());
+        if (isNovoCadastro) {
+            if (this.especialidadeDao.salvar(this.especialidade)) {
+                JOptionPane.showMessageDialog(null,
+                        "Registro inserido com sucesso", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
+                this.limparFormulario();
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Erro ao salvar especialidade", "Erro de Validação",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            if (this.especialidadeDao.atualizar(this.especialidade)) {
+                JOptionPane.showMessageDialog(null,
+                        "Registro atualizado com sucesso", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
+                this.limparFormulario();
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Erro ao atualizar especialidade", "Erro de Validação",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void carregarTabela() {
+        table = new TableModelEspecialidades(this.especialidadeDao.listar());
+        tblDoc.setModel(table);
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
