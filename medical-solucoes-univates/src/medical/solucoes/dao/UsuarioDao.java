@@ -83,10 +83,10 @@ public class UsuarioDao {
         try {
             Statement st = ConexaoBD.getInstance().getConnection().createStatement();
             login = login.toLowerCase();
-
+            
             String sql = "SELECT * FROM usuarios WHERE login = '" + login + "' AND ativo = true LIMIT 1";
             ResultSet retorno = st.executeQuery(sql);
-
+            
             Usuario usuarioObj = null;
             while (retorno.next()) {
                 usuarioObj = new Usuario();
@@ -109,6 +109,7 @@ public class UsuarioDao {
     public boolean doLogin(String senha, String senhaBanco) {
         BCrypt.Verifyer verifyer = BCrypt.verifyer();
         BCrypt.Result check = verifyer.verify(senha.toCharArray(), senhaBanco);
+        
         return check.verified;
     }
 

@@ -1,6 +1,7 @@
 package medical.solucoes.model;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import medical.solucoes.dao.UsuarioDao;
 
 public class Usuario {
 

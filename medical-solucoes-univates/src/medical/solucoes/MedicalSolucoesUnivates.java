@@ -4,6 +4,8 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import conexao.ConexaoBD;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import medical.solucoes.dao.UsuarioDao;
+import medical.solucoes.model.Usuario;
 import medical.solucoes.view.Login;
 
 public class MedicalSolucoesUnivates {
@@ -17,6 +19,7 @@ public class MedicalSolucoesUnivates {
             } else {
                 JOptionPane.showMessageDialog(null, "Erro ao conectar no Banco de Dados!");
             }
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }
