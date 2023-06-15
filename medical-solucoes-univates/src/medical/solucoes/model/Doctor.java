@@ -16,10 +16,17 @@ public class Doctor {
     
     private boolean ativo;
 
-    public Doctor(String nome, String crm, Especialidade especializacao) {
+    public Doctor(int id,String nome, String crm, Especialidade especializacao) {
+        this.id = id;
         this.nome = nome;
         this.crm = crm;
         this.especializacao = especializacao;
+    }
+
+    public Doctor() {
+        this.nome = "";
+        this.crm = "";
+        this.especializacao = new Especialidade();
     }
     
     

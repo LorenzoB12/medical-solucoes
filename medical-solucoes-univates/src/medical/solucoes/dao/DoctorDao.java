@@ -42,19 +42,47 @@ public class DoctorDao {
       public static boolean atualizar(Doctor doc){
         try {
             
-
-            String sql = "UPDATE especialidades SET "
-                    + "nome = '" + doc.getNome().toUpperCase() + "' "
+            Statement st = ConexaoBD.getInstance().getConnection().createStatement();
+            String sql = "UPDATE doctors SET "
+                    + "nome = '" + doc.getNome().toUpperCase() + "' ,"
+                    + "crm = '" + doc.getCrm().toUpperCase() + "' ,"
+                    + "ativo = '" + doc.isAtivo() + "' ,"
+                    + "especialidades_id = '" + doc.getEspecializacao().getId() + "' "
                     + "WHERE id = " + doc.getId();
 
-            PreparedStatement st = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
-            st.execute();
+            System.out.println(sql);
+            st.execute(sql);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+      
+      public Doctor buscar(int id){
+        try {
+            Statement st = ConexaoBD.getInstance().getConnection().createStatement();
+
+            String sql = "Select * from doctors " 
+                    + "WHERE id = " + id;
+ 
+            ResultSet retorno = st.executeQuery(sql);
+            
+            System.out.println(sql);
+             Doctor docObj = new Doctor(); 
+             retorno.next(); 
+             docObj.setId(retorno.getInt("id"));
+             docObj.setNome(retorno.getString("nome"));
+             docObj.setCrm(retorno.getString("crm"));
+             docObj.setAtivo(retorno.getBoolean("ativo"));
+             docObj.setEspecializacao(new EspecialidadeDao().buscar(retorno.getInt("especialidades_id")));
+               
+            return docObj;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Doctor();
+        }
+    } 
     
     public ArrayList<Doctor> listar(){
         ArrayList<Doctor> doctors = new ArrayList<>();
@@ -71,7 +99,7 @@ public class DoctorDao {
             Doctor docObj = null;
             while (retorno.next()) {
                 System.out.print(retorno);
-                docObj = new Doctor(retorno.getString("Nome"), retorno.getString("crm"), especialidadeDao.buscar(retorno.getInt("especialidades_id"))); 
+                docObj = new Doctor(retorno.getInt("id"),retorno.getString("Nome"), retorno.getString("crm"), especialidadeDao.buscar(retorno.getInt("especialidades_id"))); 
                
                 doctors.add(docObj);
             }
@@ -88,12 +116,11 @@ public class DoctorDao {
         Object[][] dadosTabela = null;
 
         //CABECALHO DA TABELA
-        Object[] cabecalho = new Object[3];
-        /*cabecalho[0] = "Id";*/
-        cabecalho[0] = "Nome";
-        cabecalho[1] = "CRM";
-        cabecalho[2] = "Especializacao";
-
+        Object[] cabecalho = new Object[4];
+        cabecalho[0] = "Id";
+        cabecalho[1] = "Nome";
+        cabecalho[2] = "CRM";
+        cabecalho[3] = "Especializacao"; 
         //INSERCAO DOS DADOS NA LISTA
         try {
 
@@ -107,11 +134,10 @@ public class DoctorDao {
 
             for (Doctor doc : lista) {
 
-                /*dadosTabela[linha][0] = user.getCodUsuario();*/
-                dadosTabela[linha][0] = doc.getNome();
-                dadosTabela[linha][1] = doc.getCrm();
-                dadosTabela[linha][2] = doc.getEspecializacao().getDescricao();
-
+                dadosTabela[linha][0] = doc.getId();
+                dadosTabela[linha][1] = doc.getNome();
+                dadosTabela[linha][2] = doc.getCrm();
+                dadosTabela[linha][3] = doc.getEspecializacao().getDescricao(); 
                 linha++;
             }
 
