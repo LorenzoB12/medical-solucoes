@@ -8,9 +8,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import medical.solucoes.dao.DoctorDao;
+import medical.solucoes.dao.EspecialidadeDao;
 import medical.solucoes.dao.UsuarioDao;
 import medical.solucoes.model.Doctor;
+import medical.solucoes.model.Especialidade;
 import medical.solucoes.model.Usuario;
+import medical.tabelas.TableModelDoctors;
 
 /**
  *
@@ -20,8 +23,20 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
 
     Doctor doctor = null;
     DoctorDao doctorDao = new DoctorDao();
+    TableModelDoctors tableModel = null;
     public IfrCadastroDoctors() {
         initComponents(); 
+        
+        rbtnActive.setSelected(true);
+        comboBoxEspecializacao.removeAllItems();
+        ArrayList<Especialidade> especialidades = new EspecialidadeDao().listar();
+         int i =0; 
+         while (i<especialidades.size()){
+              
+             comboBoxEspecializacao.addItem(especialidades.get(i).getDescricao()); 
+         i++;
+         }
+         new DoctorDao().popularTabela(tblDoc,"");
     }
 
     /**
@@ -46,8 +61,7 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
         comboBoxEspecializacao = new javax.swing.JComboBox<>();
         btnSalvarUsuario = new javax.swing.JButton();
         btnSalvarUsuario1 = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rbtnActive = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDoc = new javax.swing.JTable();
@@ -72,7 +86,12 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
         jLabel8.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel8.setText("ESPECIALIZAÇÃO");
 
-        comboBoxEspecializacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cardiologia" }));
+        comboBoxEspecializacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione" }));
+        comboBoxEspecializacao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                comboBoxEspecializacaoMouseClicked(evt);
+            }
+        });
         comboBoxEspecializacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBoxEspecializacaoActionPerformed(evt);
@@ -93,11 +112,8 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
             }
         });
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText("Ativo");
-
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("Inativo");
+        buttonGroup1.add(rbtnActive);
+        rbtnActive.setText("Ativo");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -127,11 +143,9 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jRadioButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton2)
+                                .addComponent(rbtnActive)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(comboBoxEspecializacao, 0, 532, Short.MAX_VALUE))))
+                            .addComponent(comboBoxEspecializacao, 0, 521, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -151,14 +165,12 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tfdCrm, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboBoxEspecializacao, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                .addComponent(rbtnActive)
                 .addGap(44, 44, 44)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -226,24 +238,27 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalvarUsuarioActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        new DoctorDao().popularTabela(tblDoc, "");
+       
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void btnSalvarUsuario1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarUsuario1ActionPerformed
            
          boolean isNovoCadastro = false;
         if (this.doctor == null) {
-            this.doctor = new Doctor(tfdNomeDoc.getText(),tfdCrm.getText(),"");
+            this.doctor = new Doctor(tfdNomeDoc.getText(),tfdCrm.getText(),new Especialidade());
             isNovoCadastro = true;
         }
 
         this.doctor.setNome(tfdNomeDoc.getText());
-        this.doctor.setCrm(tfdCrm.getText());
+        this.doctor.setCrm(tfdCrm.getText()); 
+        this.doctor.setEspecializacao(new EspecialidadeDao().buscarDescricao(comboBoxEspecializacao.getItemAt(comboBoxEspecializacao.getSelectedIndex())));
+        this.doctor.setAtivo(rbtnActive.isSelected());
         if (isNovoCadastro) {
             if (this.doctorDao.salvar(this.doctor)) {
                 JOptionPane.showMessageDialog(null,
                         "Registro inserido com sucesso", "Sucesso",
                         JOptionPane.INFORMATION_MESSAGE); 
+                limparFormulario();
             } else {
                 JOptionPane.showMessageDialog(null,
                         "Erro ao salvar médico", "Erro de Validação",
@@ -263,9 +278,27 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalvarUsuario1ActionPerformed
 
     private void comboBoxEspecializacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxEspecializacaoActionPerformed
-        // TODO add your handling code here:
+      
     }//GEN-LAST:event_comboBoxEspecializacaoActionPerformed
 
+    private void comboBoxEspecializacaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboBoxEspecializacaoMouseClicked
+        String autocomplete = "";
+        comboBoxEspecializacao.removeAllItems();
+        Especialidade especialidade = new Especialidade();
+         ArrayList<Especialidade> especialidades = new EspecialidadeDao().listar();
+         int i =0;
+         while (i<especialidades.size()){ 
+             comboBoxEspecializacao.addItem(especialidades.get(i).getDescricao()); 
+         i++;
+         }
+        comboBoxEspecializacao.showPopup();
+    }//GEN-LAST:event_comboBoxEspecializacaoMouseClicked
+ 
+    public void limparFormulario(){
+        tfdNomeDoc.setText("");
+        tfdCrm.setText("");
+        rbtnActive.setSelected(true);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSalvarUsuario;
@@ -279,10 +312,9 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JRadioButton rbtnActive;
     private javax.swing.JTable tblDoc;
     private javax.swing.JTextField tfdCrm;
     private javax.swing.JTextField tfdNomeDoc;

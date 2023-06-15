@@ -4,36 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Doctor {
+     
     
-    //USERS ESTÁTICOS EM MEMÓRIA ENQUANTO NÃO INTEGRAMOS COM O BD
-    public static Doctor doc1;
-    public static Doctor doc2;
-    public static Doctor doc3;
-    
-    public static List<Doctor> doutoresEstaticos = new ArrayList<>();
-    
-    static{
-        doc1 = new Doctor("Pedro", "111.222.333", "Cirurgia");
-        doc1.codDoc = 1l;
-        
-        doc2 = new Doctor("Marcos", "444.555.666", "Cardiologista");
-        doc2.codDoc = 2l;
-        
-        doc3 = new Doctor("João", "777.888.999", "Obstetra");
-        doc3.codDoc = 3l;
-    }
-    
-    private Long codDoc;
+    private int id;
     
     private String nome;
     
     private String crm;
     
-    private String especializacao;
+    private Especialidade especializacao;
     
     private boolean ativo;
 
-    public Doctor(String nome, String crm, String especializacao) {
+    public Doctor(String nome, String crm, Especialidade especializacao) {
         this.nome = nome;
         this.crm = crm;
         this.especializacao = especializacao;
@@ -49,14 +32,15 @@ public class Doctor {
         this.nome = nome;
     }
 
-    public Long getCodDoc() {
-        return codDoc;
+    public int getId() {
+        return id;
     }
 
-    public void setCodDoc(Long codDoc) {
-        this.codDoc = codDoc;
+    public void setId(int id) {
+        this.id = id;
     }
-
+ 
+    
     public String getCrm() {
         return crm;
     }
@@ -65,11 +49,11 @@ public class Doctor {
         this.crm = crm;
     }
 
-    public String getEspecializacao() {
+    public Especialidade getEspecializacao() {
         return especializacao;
     }
 
-    public void setEspecializacao(String especializacao) {
+    public void setEspecializacao(Especialidade especializacao) {
         this.especializacao = especializacao;
     }
 

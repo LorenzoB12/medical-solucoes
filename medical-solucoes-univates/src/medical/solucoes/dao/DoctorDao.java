@@ -7,12 +7,14 @@ package medical.solucoes.dao;
 import conexao.ConexaoBD;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import medical.solucoes.model.Doctor;
+import medical.solucoes.model.Especialidade;
 import medical.solucoes.model.Usuario;
 
 /**
@@ -21,19 +23,16 @@ import medical.solucoes.model.Usuario;
  */
 public class DoctorDao {
 
-    public static boolean salvar(Doctor d) { 
-        
+     public boolean salvar(Doctor d){
         try {
-            String sql = "INSERT INTO DOCTORS ((codDoc, nome, crm, especializacao_id,ativo)) VALUES (?, ?, ?, ?,?)";
-            
-            PreparedStatement pstm = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
-            pstm.setLong(1, d.getCodDoc());
-              
-            pstm.setString(2, d.getNome());
-            pstm.setString(3, d.getCrm());
-            pstm.setString(4, d.getEspecializacao()); 
-            pstm.setBoolean(5, d.isAtivo());
-            pstm.execute();
+            Statement st = ConexaoBD.getInstance().getConnection().createStatement();
+
+            String sql = "INSERT INTO doctors (nome,crm,ativo,especialidades_id) VALUES "
+                    + "('" + d.getNome().toUpperCase() + "','" +
+                    d.getCrm() + "'," + d.isAtivo() + ",'" + d.getEspecializacao().getId()+
+                    "');";
+            System.out.print(sql);
+            st.execute(sql);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,7 +45,7 @@ public class DoctorDao {
 
             String sql = "UPDATE especialidades SET "
                     + "nome = '" + doc.getNome().toUpperCase() + "' "
-                    + "WHERE id = " + doc.getCodDoc();
+                    + "WHERE id = " + doc.getId();
 
             PreparedStatement st = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
             st.execute();
@@ -63,12 +62,16 @@ public class DoctorDao {
             
 
             String sql = "SELECT * FROM doctors ORDER BY id ASC";
-            PreparedStatement st = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
+            Statement st = ConexaoBD.getInstance().getConnection().createStatement();
+            
+            System.out.print(sql);
             ResultSet retorno = st.executeQuery(sql);
             
+            EspecialidadeDao especialidadeDao = new EspecialidadeDao();
             Doctor docObj = null;
             while (retorno.next()) {
-                docObj = new Doctor(retorno.getString("Nome"), retorno.getString("crm"), retorno.getString("especializacao")); 
+                System.out.print(retorno);
+                docObj = new Doctor(retorno.getString("Nome"), retorno.getString("crm"), especialidadeDao.buscar(retorno.getInt("especialidades_id"))); 
                
                 doctors.add(docObj);
             }
@@ -96,13 +99,10 @@ public class DoctorDao {
 
             int linha = 0;
 
-            List<Doctor> lista = new ArrayList<>();
-            lista.addAll(0, Doctor.doutoresEstaticos);
-            lista.add(Doctor.doc1);
-            lista.add(Doctor.doc2);
-            lista.add(Doctor.doc3);
+            List<Doctor> lista = new DoctorDao().listar();
 
             //CRIA MATRIZ DE ACORDO COM O NUMERO DE REGISTROS
+             
             dadosTabela = new Object[lista.size()][4];
 
             for (Doctor doc : lista) {
@@ -110,7 +110,7 @@ public class DoctorDao {
                 /*dadosTabela[linha][0] = user.getCodUsuario();*/
                 dadosTabela[linha][0] = doc.getNome();
                 dadosTabela[linha][1] = doc.getCrm();
-                dadosTabela[linha][2] = doc.getEspecializacao();
+                dadosTabela[linha][2] = doc.getEspecializacao().getDescricao();
 
                 linha++;
             }
