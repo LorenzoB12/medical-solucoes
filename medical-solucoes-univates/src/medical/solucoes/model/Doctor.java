@@ -30,6 +30,8 @@ public class Doctor {
     private String crm;
     
     private String especializacao;
+    
+    private boolean ativo;
 
     public Doctor(String nome, String crm, String especializacao) {
         this.nome = nome;
@@ -70,6 +72,15 @@ public class Doctor {
     public void setEspecializacao(String especializacao) {
         this.especializacao = especializacao;
     }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+    
 
     
     

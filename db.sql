@@ -1,6 +1,5 @@
 CREATE DATABASE medical;
 
-CREATE SEQUENCE usuarios_id_seq;
 CREATE TABLE IF NOT EXISTS usuarios
 (
     id integer NOT NULL DEFAULT nextval('usuarios_id_seq'::regclass),
@@ -10,9 +9,9 @@ CREATE TABLE IF NOT EXISTS usuarios
     senha text COLLATE pg_catalog."default" NOT NULL,
     ativo boolean NOT NULL,
     CONSTRAINT usuarios_pkey PRIMARY KEY (id)
+<<<<<<< HEAD
 )
 
-CREATE SEQUENCE especialidades_id_seq;
 CREATE TABLE IF NOT EXISTS especialidades
 (
     id integer NOT NULL DEFAULT nextval('especialidades_id_seq'::regclass),
@@ -21,6 +20,8 @@ CREATE TABLE IF NOT EXISTS especialidades
 )
 
 INSERT INTO usuarios (id, nome, email, login, senha, ativo) VALUES (1, 'admin', 'admin@medical.com.br', 'admin', '$2a$10$4r2otWRd.CwAGpGFenxxc.fpy5UMf1g/lYfbZQLEyhdDhG14qqDUy', true);
+=======
+);
 
 CREATE SEQUENCE pacientes_id_seq;
 
@@ -34,4 +35,20 @@ CREATE TABLE IF NOT EXISTS pacientes
     genero text COLLATE pg_catalog."default" NOT NULL,
 	ativo boolean NOT NULL,
     CONSTRAINT pacientes_pkey PRIMARY KEY (id)
+);
+>>>>>>> 26d2d68f05f972f1f0668ac3ef3f4ee8e0535ed4
+ 
+ 
+
+CREATE SEQUENCE doctors_id_seq;
+
+CREATE TABLE IF NOT EXISTS doctors
+(
+    id integer NOT NULL DEFAULT nextval('doctors_id_seq'),
+    nome text COLLATE pg_catalog."default" NOT NULL, 
+    crm text COLLATE pg_catalog."default" NOT NULL, 
+    ativo boolean NOT NULL,
+    especialidades_id integer, -- Foreign key column
+    CONSTRAINT doctors_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_especialidades FOREIGN KEY (especialidades_id) REFERENCES especialidades (id)
 );

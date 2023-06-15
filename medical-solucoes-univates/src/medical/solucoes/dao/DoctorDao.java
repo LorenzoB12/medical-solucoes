@@ -4,7 +4,9 @@
  */
 package medical.solucoes.dao;
 
+import conexao.ConexaoBD;
 import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
@@ -19,6 +21,64 @@ import medical.solucoes.model.Usuario;
  */
 public class DoctorDao {
 
+    public static boolean salvar(Doctor d) { 
+        
+        try {
+            String sql = "INSERT INTO DOCTORS ((codDoc, nome, crm, especializacao_id,ativo)) VALUES (?, ?, ?, ?,?)";
+            
+            PreparedStatement pstm = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
+            pstm.setLong(1, d.getCodDoc());
+              
+            pstm.setString(2, d.getNome());
+            pstm.setString(3, d.getCrm());
+            pstm.setString(4, d.getEspecializacao()); 
+            pstm.setBoolean(5, d.isAtivo());
+            pstm.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+      public static boolean atualizar(Doctor doc){
+        try {
+            
+
+            String sql = "UPDATE especialidades SET "
+                    + "nome = '" + doc.getNome().toUpperCase() + "' "
+                    + "WHERE id = " + doc.getCodDoc();
+
+            PreparedStatement st = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
+            st.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public ArrayList<Doctor> listar(){
+        ArrayList<Doctor> doctors = new ArrayList<>();
+        try{
+            
+
+            String sql = "SELECT * FROM doctors ORDER BY id ASC";
+            PreparedStatement st = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
+            ResultSet retorno = st.executeQuery(sql);
+            
+            Doctor docObj = null;
+            while (retorno.next()) {
+                docObj = new Doctor(retorno.getString("Nome"), retorno.getString("crm"), retorno.getString("especializacao")); 
+               
+                doctors.add(docObj);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return doctors;
+    }
     public void popularTabela(JTable tabela, String criterio) {
 
         //LISTA DOS DADOS DECLARADA

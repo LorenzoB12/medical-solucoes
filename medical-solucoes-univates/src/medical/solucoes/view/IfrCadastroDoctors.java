@@ -18,12 +18,10 @@ import medical.solucoes.model.Usuario;
  */
 public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form 
-     */
+    Doctor doctor = null;
+    DoctorDao doctorDao = new DoctorDao();
     public IfrCadastroDoctors() {
-        initComponents();
-        new DoctorDao().popularTabela(tblDoc, "");
+        initComponents(); 
     }
 
     /**
@@ -223,22 +221,8 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarUsuarioActionPerformed
-        String nome = tfdNomeDoc.getText();
-        String crm = tfdCrm.getText();
-        
-                
-        Doctor doc = new Doctor(nome, crm, "");
-        Doctor.doutoresEstaticos.add(doc);
-        
-        tfdNomeDoc.setText("");
-        tfdCrm.setText("");
-        
-            
-        JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
-            
-        tfdNomeDoc.requestFocus();
-        
-        new DoctorDao().popularTabela(tblDoc, "");
+
+    
     }//GEN-LAST:event_btnSalvarUsuarioActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
@@ -246,7 +230,36 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void btnSalvarUsuario1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarUsuario1ActionPerformed
-        // TODO add your handling code here:
+           
+         boolean isNovoCadastro = false;
+        if (this.doctor == null) {
+            this.doctor = new Doctor(tfdNomeDoc.getText(),tfdCrm.getText(),"");
+            isNovoCadastro = true;
+        }
+
+        this.doctor.setNome(tfdNomeDoc.getText());
+        this.doctor.setCrm(tfdCrm.getText());
+        if (isNovoCadastro) {
+            if (this.doctorDao.salvar(this.doctor)) {
+                JOptionPane.showMessageDialog(null,
+                        "Registro inserido com sucesso", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE); 
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Erro ao salvar médico", "Erro de Validação",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            if (this.doctorDao.atualizar(this.doctor)) {
+                JOptionPane.showMessageDialog(null,
+                        "Registro atualizado com sucesso", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE); 
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Erro ao atualizar médico", "Erro de Validação",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } 
     }//GEN-LAST:event_btnSalvarUsuario1ActionPerformed
 
     private void comboBoxEspecializacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxEspecializacaoActionPerformed
