@@ -4,22 +4,21 @@
  */
 package medical.solucoes.view;
 
-import java.sql.*;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import medical.solucoes.dao.PacienteDao;
-import medical.solucoes.dao.UsuarioDao;
-import medical.solucoes.model.Paciente;
-import medical.solucoes.model.Usuario;
+import medical.solucoes.dao.RelatoriosDAO;
+import medical.tabelas.TableModelRelatorioConsultasPorPaciente;
 
 /**
  *
- * 
+ *
  */
 public class IfrConsultasPorPacientes extends javax.swing.JInternalFrame {
 
+    private TableModelRelatorioConsultasPorPaciente model = null;
+    private final RelatoriosDAO relatoriosDAO = new RelatoriosDAO();
+
     /**
-     * Creates new form 
+     * Creates new form
      */
     public IfrConsultasPorPacientes() {
         initComponents();
@@ -42,13 +41,12 @@ public class IfrConsultasPorPacientes extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         tfdNomePaciente = new javax.swing.JTextField();
-        tfdTelefonePaciente = new javax.swing.JTextField();
+        tfdId = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         tfdCpf = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        table = new javax.swing.JTable();
+        btnImprimir = new javax.swing.JButton();
 
         setTitle("Consulta por Pacientes");
 
@@ -56,12 +54,6 @@ public class IfrConsultasPorPacientes extends javax.swing.JInternalFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
-            }
-        });
-
-        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTabbedPane1MouseClicked(evt);
             }
         });
 
@@ -73,39 +65,23 @@ public class IfrConsultasPorPacientes extends javax.swing.JInternalFrame {
         jLabel7.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel7.setText("NOME");
 
-        tfdTelefonePaciente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfdTelefonePacienteActionPerformed(evt);
-            }
-        });
-
         jLabel9.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel9.setText("ID");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(table);
 
-        jButton2.setText("Imprimir");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnImprimir.setText("Pesquisar");
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Pesquisar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnImprimirActionPerformed(evt);
             }
         });
 
@@ -131,13 +107,11 @@ public class IfrConsultasPorPacientes extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfdTelefonePaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(tfdId, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(445, 445, 445)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(557, 557, 557)
+                        .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(10, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addContainerGap()
@@ -154,11 +128,9 @@ public class IfrConsultasPorPacientes extends javax.swing.JInternalFrame {
                     .addComponent(tfdCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(jLabel9)
-                    .addComponent(tfdTelefonePaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfdId, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(199, 199, 199))
@@ -203,28 +175,44 @@ public class IfrConsultasPorPacientes extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        boolean usouAlgumFiltro = false;
 
-    }//GEN-LAST:event_jTabbedPane1MouseClicked
+        String nome = null;
+        if (!tfdNomePaciente.getText().trim().isEmpty()) {
+            nome = tfdNomePaciente.getText();
+            usouAlgumFiltro = true;
+        }
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        String cpf = null;
+        if (!tfdCpf.getText().trim().isEmpty()) {
+            cpf = tfdCpf.getText();
+            usouAlgumFiltro = true;
+        }
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        Integer id = null;
+        if (!tfdId.getText().trim().isEmpty()) {
+            try {
+                id = Integer.parseInt(tfdId.getText());
+                usouAlgumFiltro = true;
+            } catch (Exception e) {
+            }
+        }
 
-    private void tfdTelefonePacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfdTelefonePacienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfdTelefonePacienteActionPerformed
+        if (!usouAlgumFiltro) {
+            JOptionPane.showMessageDialog(null, "Informe um filtro para pesquisa", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        this.model = new TableModelRelatorioConsultasPorPaciente(relatoriosDAO.listarConsultasPorPaciente(nome, cpf, id));
+        this.table.setModel(this.model);
+    }//GEN-LAST:event_btnImprimirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnImprimir;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -232,9 +220,9 @@ public class IfrConsultasPorPacientes extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable table;
     private javax.swing.JTextField tfdCpf;
+    private javax.swing.JTextField tfdId;
     private javax.swing.JTextField tfdNomePaciente;
-    private javax.swing.JTextField tfdTelefonePaciente;
     // End of variables declaration//GEN-END:variables
 }

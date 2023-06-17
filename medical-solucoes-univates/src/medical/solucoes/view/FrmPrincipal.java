@@ -40,7 +40,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         mniAppointment1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        mniAppointment = new javax.swing.JMenuItem();
         mniAppointment2 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
@@ -109,14 +108,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jMenu2.setText("Relatorios");
 
-        mniAppointment.setText("Consultas Por Usuário");
-        mniAppointment.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mniAppointmentActionPerformed(evt);
-            }
-        });
-        jMenu2.add(mniAppointment);
-
         mniAppointment2.setText("Consultas Por Paciente");
         mniAppointment2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -177,10 +168,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         abrirInternalFrame(new IfrCadastroDoctors());
     }//GEN-LAST:event_mniDoctorsActionPerformed
 
-    private void mniAppointmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAppointmentActionPerformed
-        
-    }//GEN-LAST:event_mniAppointmentActionPerformed
-
     private void mniAppointment1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAppointment1ActionPerformed
         abrirInternalFrame(new IfrOperacionalConsultas());
     }//GEN-LAST:event_mniAppointment1ActionPerformed
@@ -210,7 +197,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenu mnRegister;
-    private javax.swing.JMenuItem mniAppointment;
     private javax.swing.JMenuItem mniAppointment1;
     private javax.swing.JMenuItem mniAppointment2;
     private javax.swing.JMenuItem mniDoctors;

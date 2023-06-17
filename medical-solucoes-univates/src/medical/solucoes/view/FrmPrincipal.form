@@ -63,14 +63,6 @@
             <Property name="text" type="java.lang.String" value="Relatorios"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mniAppointment">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Consultas Por Usu&#xe1;rio"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mniAppointmentActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mniAppointment2">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Consultas Por Paciente"/>
