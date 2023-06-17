@@ -29,4 +29,9 @@ public class Especialidade {
         this.descricao = descricao;
     }
 
+    @Override
+    public String toString() {
+        return this.descricao;
+    }
+
 }
