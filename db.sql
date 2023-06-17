@@ -51,3 +51,16 @@ CREATE TABLE IF NOT EXISTS doctors
     CONSTRAINT doctors_pkey PRIMARY KEY (id),
     CONSTRAINT fk_especialidades FOREIGN KEY (especialidades_id) REFERENCES especialidades (id)
 );
+
+CREATE SEQUENCE consultas_id_seq;
+
+CREATE TABLE IF NOT EXISTS consultas
+(
+    id integer NOT NULL DEFAULT nextval('consultas_id_seq'),
+    dth_consulta timestamp NOT NULL,
+	id_paciente integer NOT NULL,
+	id_doctor integer NOT NULL,
+	CONSTRAINT paciente_fkey FOREIGN KEY (id_paciente) REFERENCES pacientes(id),
+	CONSTRAINT doctor_fkey FOREIGN KEY (id_doctor) REFERENCES doctors(id),
+    CONSTRAINT consultas_pkey PRIMARY KEY (id)
+);
