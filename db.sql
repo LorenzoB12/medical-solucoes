@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS especialidades
 INSERT INTO usuarios (id, nome, email, login, senha, ativo) VALUES (1, 'admin', 'admin@medical.com.br', 'admin', '$2a$10$4r2otWRd.CwAGpGFenxxc.fpy5UMf1g/lYfbZQLEyhdDhG14qqDUy', true);
 
 CREATE SEQUENCE pacientes_id_seq;
-
 CREATE TABLE IF NOT EXISTS pacientes
 (
     id integer NOT NULL DEFAULT nextval('pacientes_id_seq'),
