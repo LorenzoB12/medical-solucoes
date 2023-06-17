@@ -17,7 +17,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
      */
     public FrmPrincipal() {
         initComponents();
-
+         
         setTitle("Medical Soluções");
     }
 

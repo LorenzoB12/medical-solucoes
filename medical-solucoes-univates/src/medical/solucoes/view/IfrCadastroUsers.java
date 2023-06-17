@@ -102,6 +102,11 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setSelected(true);
         jRadioButton1.setText("Ativo");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(jRadioButton2);
         jRadioButton2.setText("Inativo");
@@ -275,6 +280,10 @@ public class IfrCadastroUsers extends javax.swing.JInternalFrame {
             this.carregarFormulario();
         }
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void carregarFormulario(){
         tfdNomeUsuario.setText(this.usuario.getNome());

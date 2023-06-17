@@ -8,9 +8,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import medical.solucoes.dao.DoctorDao;
+import medical.solucoes.dao.EspecialidadeDao;
 import medical.solucoes.dao.UsuarioDao;
 import medical.solucoes.model.Doctor;
+import medical.solucoes.model.Especialidade;
 import medical.solucoes.model.Usuario;
+import medical.tabelas.TableModelDoctors;
 
 /**
  *
@@ -18,12 +21,24 @@ import medical.solucoes.model.Usuario;
  */
 public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form 
-     */
+    Doctor doctor = null;
+    DoctorDao doctorDao = new DoctorDao();
+    TableModelDoctors tableModel = null;
+    int id=0;
+    Boolean isEditing = false;
     public IfrCadastroDoctors() {
-        initComponents();
-        new DoctorDao().popularTabela(tblDoc, "");
+        initComponents(); 
+        
+        rbtnActive.setSelected(true);
+        comboBoxEspecializacao.removeAllItems();
+        ArrayList<Especialidade> especialidades = new EspecialidadeDao().listar();
+         int i =0; 
+         while (i<especialidades.size()){
+              
+             comboBoxEspecializacao.addItem(especialidades.get(i).getDescricao()); 
+         i++;
+         }
+         new DoctorDao().popularTabela(tblDoc,"");
     }
 
     /**
@@ -37,7 +52,7 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tbdCadastro = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         tfdCrm = new javax.swing.JTextField();
@@ -48,18 +63,18 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
         comboBoxEspecializacao = new javax.swing.JComboBox<>();
         btnSalvarUsuario = new javax.swing.JButton();
         btnSalvarUsuario1 = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rbtnActive = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDoc = new javax.swing.JTable();
+        btnEdit = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Cadastro de Médicos");
 
-        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+        tbdCadastro.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTabbedPane1MouseClicked(evt);
+                tbdCadastroMouseClicked(evt);
             }
         });
 
@@ -74,7 +89,12 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
         jLabel8.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel8.setText("ESPECIALIZAÇÃO");
 
-        comboBoxEspecializacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cardiologia" }));
+        comboBoxEspecializacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione" }));
+        comboBoxEspecializacao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                comboBoxEspecializacaoMouseClicked(evt);
+            }
+        });
         comboBoxEspecializacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBoxEspecializacaoActionPerformed(evt);
@@ -95,11 +115,12 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
             }
         });
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText("Ativo");
-
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("Inativo");
+        rbtnActive.setText("Ativo");
+        rbtnActive.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnActiveActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -128,12 +149,10 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(comboBoxEspecializacao, 0, 521, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jRadioButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton2)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(comboBoxEspecializacao, 0, 532, Short.MAX_VALUE))))
+                                .addComponent(rbtnActive)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -153,14 +172,12 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tfdCrm, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboBoxEspecializacao, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                .addComponent(rbtnActive)
                 .addGap(44, 44, 44)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -168,7 +185,7 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
                 .addGap(17, 17, 17))
         );
 
-        jTabbedPane1.addTab("Cadastro", jPanel2);
+        tbdCadastro.addTab("Cadastro", jPanel2);
 
         tblDoc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -183,24 +200,35 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(tblDoc);
 
+        btnEdit.setText("Editar");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 618, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnEdit)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 618, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(25, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnEdit)
+                .addGap(6, 6, 6))
         );
 
-        jTabbedPane1.addTab("Listagem", jPanel1);
+        tbdCadastro.addTab("Listagem", jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -208,14 +236,14 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tbdCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(57, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jTabbedPane1)
+                .addComponent(tbdCadastro)
                 .addGap(40, 40, 40))
         );
 
@@ -223,38 +251,106 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarUsuarioActionPerformed
-        String nome = tfdNomeDoc.getText();
-        String crm = tfdCrm.getText();
-        
-                
-        Doctor doc = new Doctor(nome, crm, "");
-        Doctor.doutoresEstaticos.add(doc);
-        
-        tfdNomeDoc.setText("");
-        tfdCrm.setText("");
-        
-            
-        JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
-            
-        tfdNomeDoc.requestFocus();
-        
-        new DoctorDao().popularTabela(tblDoc, "");
+        limparFormulario(); 
     }//GEN-LAST:event_btnSalvarUsuarioActionPerformed
 
-    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        new DoctorDao().popularTabela(tblDoc, "");
-    }//GEN-LAST:event_jTabbedPane1MouseClicked
+    private void tbdCadastroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbdCadastroMouseClicked
+       
+    }//GEN-LAST:event_tbdCadastroMouseClicked
 
     private void btnSalvarUsuario1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarUsuario1ActionPerformed
-        // TODO add your handling code here:
+            
+        if (this.doctor == null) {
+            this.doctor = new Doctor(id,tfdNomeDoc.getText(),tfdCrm.getText(),new Especialidade()); 
+        }
+
+        this.doctor.setNome(tfdNomeDoc.getText());
+        this.doctor.setCrm(tfdCrm.getText()); 
+        this.doctor.setEspecializacao(new EspecialidadeDao().buscarDescricao(comboBoxEspecializacao.getItemAt(comboBoxEspecializacao.getSelectedIndex())));
+        this.doctor.setAtivo(rbtnActive.isSelected());
+        if (!isEditing) {
+            if (this.doctorDao.salvar(this.doctor)) {
+                JOptionPane.showMessageDialog(null,
+                        "Registro inserido com sucesso", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);  
+                limparFormulario();
+                isEditing=false;
+                new DoctorDao().popularTabela(tblDoc,"");
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Erro ao salvar médico", "Erro de Validação",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            if (this.doctorDao.atualizar(this.doctor)) {
+                JOptionPane.showMessageDialog(null,
+                        "Registro atualizado com sucesso", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE); 
+                limparFormulario();
+                isEditing=false;
+                new DoctorDao().popularTabela(tblDoc,"");
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Erro ao atualizar médico", "Erro de Validação",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } 
     }//GEN-LAST:event_btnSalvarUsuario1ActionPerformed
 
     private void comboBoxEspecializacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxEspecializacaoActionPerformed
-        // TODO add your handling code here:
+      
     }//GEN-LAST:event_comboBoxEspecializacaoActionPerformed
 
+    private void comboBoxEspecializacaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboBoxEspecializacaoMouseClicked
+        String autocomplete = "";
+        comboBoxEspecializacao.removeAllItems();
+        Especialidade especialidade = new Especialidade();
+         ArrayList<Especialidade> especialidades = new EspecialidadeDao().listar();
+         int i =0;
+         while (i<especialidades.size()){ 
+             comboBoxEspecializacao.addItem(especialidades.get(i).getDescricao()); 
+         i++;
+         }
+        comboBoxEspecializacao.showPopup();
+    }//GEN-LAST:event_comboBoxEspecializacaoMouseClicked
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        String idString = String.valueOf(tblDoc.getValueAt(tblDoc.getSelectedRow(), 0));
+
+        id = Integer.parseInt(idString);
+
+        Doctor  doctor = new DoctorDao().buscar(id);
+
+        tbdCadastro.setSelectedIndex(0);
+
+        tfdNomeDoc.setText(doctor.getNome());
+        
+        tfdCrm.setText(doctor.getCrm()); 
+ 
+        if (doctor.isAtivo()==true){
+        rbtnActive.setSelected(true);
+        }
+        else{
+        rbtnActive.setSelected(false);
+        }
+        
+        isEditing = true;
+        comboBoxEspecializacao.setSelectedItem(doctor.getEspecializacao().getDescricao());  
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void rbtnActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnActiveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rbtnActiveActionPerformed
+ 
+    public void limparFormulario(){
+        tfdNomeDoc.setText("");
+        tfdCrm.setText("");
+        rbtnActive.setSelected(true);
+        isEditing=false;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnSalvarUsuario;
     private javax.swing.JButton btnSalvarUsuario1;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -266,10 +362,9 @@ public class IfrCadastroDoctors extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JCheckBox rbtnActive;
+    private javax.swing.JTabbedPane tbdCadastro;
     private javax.swing.JTable tblDoc;
     private javax.swing.JTextField tfdCrm;
     private javax.swing.JTextField tfdNomeDoc;
