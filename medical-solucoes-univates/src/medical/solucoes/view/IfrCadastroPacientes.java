@@ -63,7 +63,6 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         btnEditarPaciente = new javax.swing.JButton();
-        btnAtivarInativarPaciente = new javax.swing.JButton();
 
         setTitle("Cadastro de Pacientes");
 
@@ -131,11 +130,6 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setText("Ativo");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
-            }
-        });
 
         buttonGroup1.add(jRadioButton2);
         jRadioButton2.setText("Inativo");
@@ -245,21 +239,12 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
             }
         });
 
-        btnAtivarInativarPaciente.setText("Inativar / Ativar");
-        btnAtivarInativarPaciente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAtivarInativarPacienteActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAtivarInativarPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnEditarPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSalvarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -280,8 +265,7 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(btnSalvarUsuario)
-                    .addComponent(btnEditarPaciente)
-                    .addComponent(btnAtivarInativarPaciente))
+                    .addComponent(btnEditarPaciente))
                 .addContainerGap())
         );
 
@@ -293,34 +277,7 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnSalvarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarUsuarioActionPerformed
-        Long id = new PacienteDao().consultarProximoId();
-        String nome = tfdNomePaciente.getText();
-        String dataNascimento = tfdDataNascimento.getText();
-        String cpf = tfdCpf.getText();
-        String telefone = tfdTelefonePaciente.getText();
-        String genero = jComboBoxGenero.getSelectedItem().toString().toUpperCase();
-                
-        Paciente paciente = new Paciente(id, nome, cpf, dataNascimento, telefone, genero);
-        
-        if(idPaciente == 0l){
-            new PacienteDao().salvar(paciente);
-        } else{
-            PacienteDao pacienteDao = new PacienteDao();
-            pacienteDao.atualizarPaciente(idPaciente, nome, dataNascimento, cpf, telefone, genero);
-        }
-        
-        tfdNomePaciente.setText("");
-        tfdDataNascimento.setText("");
-        tfdCpf.setText("");
-        tfdTelefonePaciente.setText("");
-            
-        JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
-            
-        tfdNomePaciente.requestFocus();
-        
-        new PacienteDao().popularTabela(jTable1, "");
-        
-        idPaciente = 0l;
+        this.acaoSalvarPaciente();
     }//GEN-LAST:event_btnSalvarUsuarioActionPerformed
 
     private void tfdTelefonePacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfdTelefonePacienteActionPerformed
@@ -336,30 +293,78 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jComboBoxGeneroActionPerformed
 
     private void btnEditarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPacienteActionPerformed
+        this.editarPaciente();
+    }//GEN-LAST:event_btnEditarPacienteActionPerformed
+
+    private void jTabbedPane1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabbedPane1FocusGained
+        
+    }//GEN-LAST:event_jTabbedPane1FocusGained
+    
+    private void carregarTabela(){
+        tableModel = new TableModelPacientes(this.pacienteDao.listar());
+        jTable1.setModel(tableModel);
+    }
+    
+    private void acaoSalvarPaciente(){
+        Long id = new PacienteDao().consultarProximoId();
+        String nome = tfdNomePaciente.getText();
+        String dataNascimento = tfdDataNascimento.getText();
+        String cpf = tfdCpf.getText();
+        String telefone = tfdTelefonePaciente.getText();
+        String genero = jComboBoxGenero.getSelectedItem().toString().toUpperCase();
+        
+        Boolean ativo = jRadioButton1.isSelected();
+        Boolean inativo = jRadioButton2.isSelected();
+        Boolean indAtivo;
+        if((!ativo && !inativo) || (ativo)){
+            indAtivo = Boolean.TRUE;
+        } else{
+            indAtivo = Boolean.FALSE;
+        }
+                
+        Paciente paciente = new Paciente(id, nome, cpf, dataNascimento, telefone, genero);
+        
+        if(idPaciente == 0l){
+            new PacienteDao().salvar(paciente);
+        } else{
+            PacienteDao pacienteDao = new PacienteDao();
+            Paciente pacienteEditar = new Paciente(idPaciente, nome, cpf, dataNascimento, telefone, genero, indAtivo);
+            pacienteDao.atualizarPaciente(pacienteEditar);
+        }
+        
+        tfdNomePaciente.setText("");
+        tfdDataNascimento.setText("");
+        tfdCpf.setText("");
+        tfdTelefonePaciente.setText("");
+            
+        JOptionPane.showMessageDialog(this, "Registro salvo com sucesso!");
+            
+        tfdNomePaciente.requestFocus();
+        
+        idPaciente = 0l;
+    }
+    
+    public void editarPaciente(){
         String idTabela = String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-
         idPaciente = Long.parseLong(idTabela);
-
         Paciente paciente = new PacienteDao().consultarId(idPaciente);
 
         if (paciente != null) {
             jTabbedPane1.setSelectedIndex(1);
-
+            
             tfdNomePaciente.setText(paciente.getNome());
             tfdDataNascimento.setText(paciente.getDataNascimento());
             tfdTelefonePaciente.setText(paciente.getTelefone());
             tfdCpf.setText(paciente.getCpf());
+            
             jComboBoxGenero.setSelectedItem(paciente.getGenero());
-
             tfdNomePaciente.requestFocus();
         } else {
             JOptionPane.showMessageDialog(this, "Id do paciente não encontrado!");
         }
-        
-        new PacienteDao().popularTabela(jTable1, "");
-    }//GEN-LAST:event_btnEditarPacienteActionPerformed
-
-    private void btnAtivarInativarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtivarInativarPacienteActionPerformed
+    }
+    
+    public void inativarPaciente(){
         String idTabela = String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 0));
         String indAtivo = String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 6));
 
@@ -382,26 +387,10 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
         }
         
         idPaciente = 0l;
-        
-        new PacienteDao().popularTabela(jTable1, "");
-    }//GEN-LAST:event_btnAtivarInativarPacienteActionPerformed
-
-    private void jTabbedPane1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabbedPane1FocusGained
-        
-    }//GEN-LAST:event_jTabbedPane1FocusGained
-
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
-    
-    private void carregarTabela(){
-        tableModel = new TableModelPacientes(this.pacienteDao.listar());
-        jTable1.setModel(tableModel);
     }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAtivarInativarPaciente;
     private javax.swing.JButton btnEditarPaciente;
     private javax.swing.JButton btnSalvarUsuario;
     private javax.swing.ButtonGroup buttonGroup1;

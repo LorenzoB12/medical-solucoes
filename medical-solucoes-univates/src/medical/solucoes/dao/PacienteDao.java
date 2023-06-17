@@ -58,9 +58,31 @@ public class PacienteDao {
     
     
     public Paciente consultarId(Long idPaciente){
+        Paciente paciente = new Paciente();
+        try{
+            String sql = "SELECT * FROM PACIENTES WHERE ID = " + idPaciente;
+            PreparedStatement pstm = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
+            ResultSet rs = pstm.executeQuery();
+            
+            while(rs.next()){
+                paciente.setId(rs.getLong(1));
+                paciente.setNome(rs.getString(2));
+                
+                Date dataNascimentoSql = rs.getDate(3);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String dataNascimentoFormatada = dateFormat.format(dataNascimentoSql);
+                paciente.setDataNascimento(dataNascimentoFormatada);
+                
+                paciente.setCpf(rs.getString(4));
+                paciente.setTelefone(rs.getString(5));
+                paciente.setGenero(rs.getString(6));
+            }
+            
+        } catch (Exception e){
+            System.out.println(e);
+        }
         
-        return null;
-        
+        return paciente;
     }
     
     public Long consultarProximoId(){
@@ -81,7 +103,36 @@ public class PacienteDao {
         
     }
     
-    public void atualizarPaciente(Long idPaciente, String nome, String dataNascimento, String cpf, String telefone, String genero){
+    public boolean atualizarPaciente(Paciente paciente){
+        
+        try {
+            Statement st = ConexaoBD.getInstance().getConnection().createStatement();
+
+            String sql = "UPDATE PACIENTES SET NOME = ?, DATA_NASCIMENTO = ?, CPF = ?, TELEFONE = ?, GENERO = ?, ATIVO = ? WHERE ID = ?";
+            PreparedStatement pstm = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
+        
+            pstm.setString(1, paciente.getNome());
+            
+            Integer dia = Integer.parseInt(paciente.getDataNascimento().split("/")[0]);
+            Integer mes = Integer.parseInt(paciente.getDataNascimento().split("/")[1]);
+            Integer ano = Integer.parseInt(paciente.getDataNascimento().split("/")[2]);
+            LocalDate localDate = LocalDate.of(ano, mes, dia);
+            Date sqlDate = Date.valueOf(localDate);
+            pstm.setDate(2, sqlDate);
+            
+            pstm.setString(3, paciente.getCpf());
+            pstm.setString(4, paciente.getTelefone());
+            pstm.setString(5, paciente.getGenero());
+            pstm.setBoolean(6, paciente.getIndAtivo());
+            pstm.setLong(7, paciente.getId());
+            
+            pstm.executeUpdate();
+            return true;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         
     }
     
