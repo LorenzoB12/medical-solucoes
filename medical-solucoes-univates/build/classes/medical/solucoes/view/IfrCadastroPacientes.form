@@ -28,8 +28,6 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="btnAtivarInativarPaciente" min="-2" pref="130" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btnEditarPaciente" min="-2" pref="75" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btnSalvarUsuario" min="-2" pref="75" max="-2" attributes="0"/>
@@ -54,7 +52,6 @@
                   <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnSalvarUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnEditarPaciente" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnAtivarInativarPaciente" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -263,9 +260,6 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Ativo"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton1ActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="jRadioButton2">
               <Properties>
@@ -338,14 +332,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditarPacienteActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnAtivarInativarPaciente">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Inativar / Ativar"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAtivarInativarPacienteActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

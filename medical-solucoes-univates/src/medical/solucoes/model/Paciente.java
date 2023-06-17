@@ -37,6 +37,16 @@ public class Paciente {
         this.indAtivo = Boolean.TRUE;
     }
     
+    public Paciente(Long id, String nome, String cpf, String dataNascimento, String telefone, String genero, Boolean indAtivo) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.telefone = telefone;
+        this.genero = genero;
+        this.indAtivo = indAtivo;
+    }
+    
     public Paciente(){};
     
     public void setId(Long id) {
