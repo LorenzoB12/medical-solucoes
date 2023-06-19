@@ -4,17 +4,41 @@
  */
 package medical.solucoes.view;
 
+import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
+import medical.solucoes.dao.ConsultaObsDao;
+import medical.solucoes.model.Consulta;
+import medical.solucoes.model.ConsultaObs;
+
 /**
  *
  * @author Carlos
  */
 public class IfrOperacionalConsultorio extends javax.swing.JInternalFrame {
 
+    private JDesktopPane jDesktopPane1 = null;
+    private Consulta consulta = null;
+    private ConsultaObs consultaObs = null;
+
     /**
      * Creates new form IfrOperacionalConsulta
      */
-    public IfrOperacionalConsultorio() {
+    public IfrOperacionalConsultorio(JDesktopPane jDesktopPane1, Consulta consulta) {
         initComponents();
+        this.jDesktopPane1 = jDesktopPane1;
+        this.consulta = consulta;
+
+        // Carrega dados
+        tfDescricao.setText(this.consulta.getPaciente().getNome());
+
+        ConsultaObsDao consultaObsDao = new ConsultaObsDao();
+        this.consultaObs = consultaObsDao.getByConsulta(this.consulta);
+        
+        if(this.consultaObs != null){
+            jTextArea1.setText(this.consultaObs.getDesSintomas());
+            jTextArea2.setText(this.consultaObs.getDesTratamento());
+            jTextArea3.setText(this.consultaObs.getDesObservacoes());
+        }
     }
 
     /**
@@ -37,6 +61,7 @@ public class IfrOperacionalConsultorio extends javax.swing.JInternalFrame {
         jTextArea2 = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         jTextArea3 = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Consultório");
@@ -124,6 +149,13 @@ public class IfrOperacionalConsultorio extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Observações", jPanel3);
 
+        jButton1.setText("Salvar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -134,6 +166,10 @@ public class IfrOperacionalConsultorio extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tfDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -147,12 +183,14 @@ public class IfrOperacionalConsultorio extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addContainerGap(247, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(65, 65, 65)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(29, Short.MAX_VALUE)))
+                    .addContainerGap(28, Short.MAX_VALUE)))
         );
 
         pack();
@@ -162,8 +200,37 @@ public class IfrOperacionalConsultorio extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (this.consultaObs == null) {
+            this.consultaObs = new ConsultaObs();
+        }
+
+        consultaObs.setConsulta(this.consulta);
+        consultaObs.setDesObservacoes(jTextArea3.getText());
+        consultaObs.setDesSintomas(jTextArea1.getText());
+        consultaObs.setDesTratamento(jTextArea2.getText());
+
+        ConsultaObsDao consultaObsDao = new ConsultaObsDao();
+
+        if (this.consultaObs.getId() == null) {
+            if (consultaObsDao.salvar(consultaObs)) {
+                JOptionPane.showMessageDialog(null, "Registro inserido com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao inserir registro", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            if (consultaObsDao.atualizar(consultaObs)) {
+                JOptionPane.showMessageDialog(null, "Registro atualizado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao inserir registro", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

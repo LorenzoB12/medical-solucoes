@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import medical.solucoes.model.Consulta;
 import medical.solucoes.model.Doctor;
 import medical.solucoes.model.Paciente;
+import medical.utilitarios.ParseTimestamp;
 
 /**
  *
@@ -82,6 +83,41 @@ public class ConsultaDao {
         return consultas;
     }
     
+    public ArrayList<Consulta> listarPorData(String dataIni, String dataFim) {
+        ArrayList<Consulta> consultas = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM CONSULTAS WHERE DTH_CONSULTA BETWEEN ? AND ?;";
+            PreparedStatement pstm = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
+            
+            Timestamp dataInicial = ParseTimestamp.parse(dataIni);
+            Timestamp dataFinal = ParseTimestamp.parse(dataFim);
+            
+            pstm.setTimestamp(1, dataInicial);
+            pstm.setTimestamp(2, dataFinal);
+            ResultSet retorno = pstm.executeQuery();
+
+            Consulta consultaObj = null;
+            while (retorno.next()) {
+                consultaObj = new Consulta();
+                consultaObj.setId(retorno.getLong("id"));
+                consultaObj.setDthConsulta(retorno.getTimestamp("dth_consulta").toString());
+                
+                Paciente paciente = new PacienteDao().consultarId(retorno.getLong("id_paciente"));
+                consultaObj.setPaciente(paciente);
+                
+                Doctor doctor = new DoctorDao().buscar((int) retorno.getLong("id_doctor"));
+                consultaObj.setDoctor(doctor);
+                
+                consultas.add(consultaObj);
+            }
+
+            return consultas;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return consultas;
+    }
+    
     private Boolean validaConsulta(Consulta c) {
         
         ArrayList<Consulta> consultas = new ArrayList<>();
@@ -97,9 +133,6 @@ public class ConsultaDao {
             Timestamp dtaInicialSql = Timestamp.valueOf(dtaInicial);
             LocalDateTime dtaFinal = localDate.plusMinutes(59l);
             Timestamp dtaFinalSql = Timestamp.valueOf(dtaFinal);
-            
-            System.out.println(dtaInicialSql);
-            System.out.println(dtaFinalSql);
             
             String sql = "SELECT * FROM CONSULTAS WHERE DTH_CONSULTA BETWEEN ? AND ? AND (ID_PACIENTE = ? OR ID_DOCTOR = ?)";
             PreparedStatement pstm = ConexaoBD.getInstance().getConnection().prepareStatement(sql);

@@ -294,6 +294,7 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
 
     private void btnEditarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPacienteActionPerformed
         this.editarPaciente();
+        jTabbedPane1.setSelectedIndex(0);
     }//GEN-LAST:event_btnEditarPacienteActionPerformed
 
     private void jTabbedPane1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabbedPane1FocusGained
@@ -356,6 +357,12 @@ public class IfrCadastroPacientes extends javax.swing.JInternalFrame {
             tfdDataNascimento.setText(paciente.getDataNascimento());
             tfdTelefonePaciente.setText(paciente.getTelefone());
             tfdCpf.setText(paciente.getCpf());
+            
+            if(paciente.getIndAtivo()){
+                jRadioButton1.setSelected(true);
+            } else {
+                jRadioButton2.setSelected(true);
+            }
             
             jComboBoxGenero.setSelectedItem(paciente.getGenero());
             tfdNomePaciente.requestFocus();

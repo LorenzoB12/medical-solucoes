@@ -169,7 +169,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mniDoctorsActionPerformed
 
     private void mniAppointment1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAppointment1ActionPerformed
-        abrirInternalFrame(new IfrOperacionalConsultas());
+        abrirInternalFrame(new IfrOperacionalConsultas(this.jDesktopPane1));
     }//GEN-LAST:event_mniAppointment1ActionPerformed
 
     private void mniUsers1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniUsers1ActionPerformed

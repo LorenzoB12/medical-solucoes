@@ -4,7 +4,10 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import conexao.ConexaoBD;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import medical.solucoes.dao.ConsultaObsDao;
 import medical.solucoes.dao.UsuarioDao;
+import medical.solucoes.model.Consulta;
+import medical.solucoes.model.ConsultaObs;
 import medical.solucoes.model.Usuario;
 import medical.solucoes.view.Login;
 
