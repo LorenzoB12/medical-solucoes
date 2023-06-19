@@ -27,9 +27,7 @@ import medical.solucoes.model.Paciente;
 public class PacienteDao {
     
     
-    public boolean salvar(Paciente p) {
-        System.out.println(p.getDataNascimento());
-        
+    public boolean salvar(Paciente p) {        
         try {
             String sql = "INSERT INTO PACIENTES (nome, data_nascimento, cpf, telefone, genero, ativo) VALUES (?, ?, ?, ?, ?, ?)";
             

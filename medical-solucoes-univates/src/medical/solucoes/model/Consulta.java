@@ -20,7 +20,14 @@ public class Consulta {
     
     private Doctor doctor;
 
-    
+    public Consulta(Long id, String dthConsulta, Paciente paciente, Doctor doctor) {
+        this.id = id;
+        this.dthConsulta = dthConsulta;
+        this.paciente = paciente;
+        this.doctor = doctor;
+    }
+
+    public Consulta(){}
     
     public Long getId() {
         return id;
