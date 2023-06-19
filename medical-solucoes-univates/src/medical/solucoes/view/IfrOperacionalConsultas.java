@@ -4,6 +4,7 @@
  */
 package medical.solucoes.view;
 
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -17,7 +18,6 @@ import medical.solucoes.model.Paciente;
 import medical.tabelas.TableModelConsultas;
 import medical.tabelas.TableModelPacientes;
 
-
 /**
  *
  * @author Carlos
@@ -26,14 +26,16 @@ public class IfrOperacionalConsultas extends javax.swing.JInternalFrame {
 
     private TableModelConsultas tableModel = null;
     private final ConsultaDao consultaDao = new ConsultaDao();
-    
+    private JDesktopPane jDesktopPane1 = null;
+
     /**
      * Creates new form IfrOperacionalConsultas
      */
-    public IfrOperacionalConsultas() {
+    public IfrOperacionalConsultas(JDesktopPane jDesktopPane1) {
         initComponents();
         new ComboBoxUtil().popularCombo("PACIENTES", jComboBoxPaciente);
         new ComboBoxUtil().popularCombo("DOCTORS", jComboBoxDoctor);
+        this.jDesktopPane1 = jDesktopPane1;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -54,7 +56,7 @@ public class IfrOperacionalConsultas extends javax.swing.JInternalFrame {
         jComboBoxPaciente = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         btnBuscarPacientesFiltro = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -183,7 +185,7 @@ public class IfrOperacionalConsultas extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Cadastro", jPanel2);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -194,7 +196,7 @@ public class IfrOperacionalConsultas extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         btnBuscarPacientesFiltro.setText("BUSCAR");
         btnBuscarPacientesFiltro.addActionListener(new java.awt.event.ActionListener() {
@@ -300,7 +302,7 @@ public class IfrOperacionalConsultas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jComboBoxPacienteActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if(!this.salvarConsulta(new Consulta())){
+        if (!this.salvarConsulta(new Consulta())) {
             JOptionPane.showMessageDialog(null, "Consulta inválida! Verifique as agendas do doutor e do paciente!", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -310,7 +312,13 @@ public class IfrOperacionalConsultas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBuscarPacientesFiltroActionPerformed
 
     private void btnRealizarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarConsultaActionPerformed
-        this.abrirFrameOperacionalConsultorio();
+        if (this.table.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Selecione uma consulta", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Consulta consulta = (Consulta) this.tableModel.getValueAt(this.table.getSelectedRow(), -1);
+
+        this.abrirFrameOperacionalConsultorio(consulta);
     }//GEN-LAST:event_btnRealizarConsultaActionPerformed
 
 
@@ -332,7 +340,7 @@ public class IfrOperacionalConsultas extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable table;
     private javax.swing.JFormattedTextField tfdDtaConsulta;
     private javax.swing.JFormattedTextField tfdHoraConsulta;
     private javax.swing.JFormattedTextField tffDtaFinalFiltroConsulta;
@@ -362,22 +370,21 @@ public class IfrOperacionalConsultas extends javax.swing.JInternalFrame {
 
     private void carregarTabela() {
         tableModel = new TableModelConsultas(this.consultaDao.listar());
-        jTable1.setModel(tableModel);
+        table.setModel(tableModel);
     }
 
-    private void carregarTabelaFiltroData(){
+    private void carregarTabelaFiltroData() {
         String dthInicio = tffDtaInicialFiltroConsulta.getText();
         dthInicio += " 00:00";
         String dthFim = tffDtaFinalFiltroConsulta.getText();
         dthFim += " 23:59";
         tableModel = new TableModelConsultas(this.consultaDao.listarPorData(dthInicio, dthFim));
-        jTable1.setModel(tableModel);
+        table.setModel(tableModel);
     }
-    
-    private void abrirFrameOperacionalConsultorio(){
-        IfrOperacionalConsultorio ifr = new IfrOperacionalConsultorio();
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        frame.getContentPane().add(ifr);
-        ifr.setVisible(true); 
+
+    private void abrirFrameOperacionalConsultorio(Consulta consulta) {
+        IfrOperacionalConsultorio ifr = new IfrOperacionalConsultorio(this.jDesktopPane1, consulta);
+        this.jDesktopPane1.add(ifr);
+        ifr.setVisible(true);
     }
 }

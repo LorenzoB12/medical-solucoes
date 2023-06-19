@@ -31,12 +31,56 @@ public class ConsultaObsDao {
             pstm.setString(2, c.getDesTratamento());
             pstm.setString(3, c.getDesObservacoes());
             pstm.setLong(4, c.getConsulta().getId());
-            
+
             pstm.execute();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public boolean atualizar(ConsultaObs c) {
+        try {
+            String sql = "UPDATE CONSULTAS_OBS SET DES_SINTOMAS = ?, DES_TRATAMENTO = ?, "
+                    + "DES_OBSERVACOES = ?, ID_CONSULTA = ? WHERE id = ?";
+            PreparedStatement pstm = ConexaoBD.getInstance().getConnection().prepareStatement(sql);
+
+            pstm.setString(1, c.getDesSintomas());
+            pstm.setString(2, c.getDesTratamento());
+            pstm.setString(3, c.getDesObservacoes());
+            pstm.setLong(4, c.getConsulta().getId());
+            pstm.setLong(5, c.getId());
+
+            pstm.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public ConsultaObs getByConsulta(Consulta consulta){
+        try{
+            String sql = "SELECT * FROM CONSULTAS_OBS WHERE ID_CONSULTA = " + consulta.getId();
+            Statement st = ConexaoBD.getInstance().getConnection().createStatement();
+            
+            ResultSet retorno = st.executeQuery(sql);
+            while (retorno.next()) {
+                ConsultaObs consultaObs = new ConsultaObs();
+                consultaObs.setId(retorno.getLong("id"));
+                consultaObs.setDesSintomas(retorno.getString("des_sintomas"));
+                consultaObs.setDesTratamento(retorno.getString("des_tratamento"));
+                consultaObs.setDesObservacoes(retorno.getString("des_observacoes"));
+                consultaObs.setConsulta(consulta);
+                
+                return consultaObs;
+            }
+            
+            return null;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 
