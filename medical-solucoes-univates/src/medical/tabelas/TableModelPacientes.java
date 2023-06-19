@@ -1,5 +1,6 @@
 package medical.tabelas;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -54,6 +55,9 @@ public class TableModelPacientes extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
+            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            
             Paciente paciente = (Paciente) this.dados.get(rowIndex);
             Object retorno = "";
             switch (columnIndex) {
@@ -70,7 +74,7 @@ public class TableModelPacientes extends AbstractTableModel {
                     break;
                     
                 case COL_DATA_NASCIMENTO:
-                    retorno = paciente.getDataNascimento();
+                    retorno = format.format(format1.parse(paciente.getDataNascimento()));
                     break;
 
                 case COL_TELEFONE:

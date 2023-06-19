@@ -74,6 +74,7 @@ public class PacienteDao {
                 paciente.setCpf(rs.getString(4));
                 paciente.setTelefone(rs.getString(5));
                 paciente.setGenero(rs.getString(6));
+                paciente.setIndAtivo(rs.getBoolean(7));
             }
             
         } catch (Exception e){
