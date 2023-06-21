@@ -30,7 +30,7 @@ public class RelatoriosDAO {
                     + "WHERE 1=1 ";
 
             if (nome != null && !nome.trim().isEmpty()) {
-                sql += "AND (p.nome LIKE '%" + nome.toLowerCase() + "%' OR p.nome LIKE '%" + nome.toUpperCase() + "%') ";
+                sql += "AND (p.nome ILIKE '%" + nome.toLowerCase() + "%' OR p.nome ILIKE '%" + nome.toUpperCase() + "%') ";
             }
 
             if (cpf != null && !cpf.trim().isEmpty()) {
@@ -41,6 +41,8 @@ public class RelatoriosDAO {
                 sql += "AND c.id = " + id;
             }
 
+            System.out.println(sql);
+            
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
@@ -79,7 +81,7 @@ public class RelatoriosDAO {
                     + "WHERE 1=1 ";
 
             if (nome != null && !nome.trim().isEmpty()) {
-                sql += "AND (d.nome LIKE '%" + nome.toLowerCase() + "%' OR d.nome LIKE '%" + nome.toUpperCase() + "%') ";
+                sql += "AND (d.nome ILIKE '%" + nome.toLowerCase() + "%' OR d.nome ILIKE '%" + nome.toUpperCase() + "%') ";
             }
 
             if (especialidade != null && especialidade > 0) {
